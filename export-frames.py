@@ -188,7 +188,7 @@ for ivid,vid in enumerate(videos):
             second = math.floor(index/fps)
             try:
                 real_frame_number = index
-                filename = "/content/drive/MyDrive/ResearchProject/videos-bright-6/images-batch-1/" + vidname + "_" + str(real_frame_number) + "_" + str(frame_number) + ".jpg"
+                filename = "/content/drive/MyDrive/ResearchProject/videos-bright-6/images-batch-1/" + vname + "_" + str(real_frame_number) + "_" + str(frame_number) + ".jpg"
                 if (index/fps > second and index/fps <= second + 1/fps ):
                     image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
                     cv2.imwrite(filename, image)
