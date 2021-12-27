@@ -189,15 +189,18 @@ for ivid,vid in enumerate(videos):
             frame_number = 1
             try:
                 real_frame_number = index
-                filename = "/content/drive/MyDrive/ResearchProject/videos-bright-6/images-batch-1/" + vidname + "_" + real_frame_number + "_" + frame_number + ".jpg"
+                filename = "/content/drive/MyDrive/ResearchProject/videos-bright-6/images-batch-1/" + vidname + "_" + str(real_frame_number) + "_" + str(frame_number) + ".jpg"
                 if (index > second and index <= second + 1 ):
                     cv2.imwrite(filename, input_image)
+                    print(filename)
                     frame_number +=1
                 elif (index > second + fps/3 and index <= second + fps/3 + 1):
                     cv2.imwrite(filename, input_image)
+                    print(filename)
                     frame_number += 1
                 elif (index > second + fps/3*2 and index <= second + fps/3*2 + 1):
                     cv2.imwrite(filename, input_image)
+                    print(filename)
                     frame_number += 1
             except Exception as e:
                 print(str(e))
