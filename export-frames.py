@@ -147,7 +147,7 @@ class VideoProcessorSK(VideoProcessor):
         self.svid.writeFrame(frame)
     
     def close(self):
-        self.svid.close()
+        #self.svid.close()
         self.vid.close()
 
 
