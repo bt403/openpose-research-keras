@@ -199,7 +199,8 @@ for ivid,vid in enumerate(videos):
                 elif (index > second + fps/3*2 and index <= second + fps/3*2 + 1):
                     cv2.imwrite(filename, input_image)
                     frame_number += 1
-            except:
+            except Exception as e:
+                print(str(e))
                 print('error during pose estimation')
         clip.close()
         toc = time.time()
