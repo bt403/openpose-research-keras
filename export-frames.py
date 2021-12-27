@@ -202,7 +202,7 @@ for ivid,vid in enumerate(videos):
                     print(filename)
                     frame_number += 1
             except Exception as e:
-                print(str(e))
+                print(repr(e))
                 print('error during pose estimation')
         clip.close()
         toc = time.time()
