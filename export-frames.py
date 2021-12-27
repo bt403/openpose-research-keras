@@ -185,7 +185,7 @@ for ivid,vid in enumerate(videos):
 
         for index in tqdm(range(nframes)):
             input_image = clip.load_frame()
-            second = math.floor(index/fps,0)
+            second = math.floor(index/fps)
             frame_number = 1
             try:
                 real_frame_number = index
