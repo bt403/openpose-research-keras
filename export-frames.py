@@ -182,23 +182,22 @@ for ivid,vid in enumerate(videos):
         print("Overall # of frames: ", nframes, "with frame dimensions: ",
               ny,nx)
         print("Generating frames")
-
+        frame_number = 1
         for index in tqdm(range(nframes)):
             input_image = clip.load_frame()
             second = math.floor(index/fps)
-            frame_number = 1
             try:
                 real_frame_number = index
                 filename = "/content/drive/MyDrive/ResearchProject/videos-bright-6/images-batch-1/" + vidname + "_" + str(real_frame_number) + "_" + str(frame_number) + ".jpg"
-                if (index/fps > second and index/fps <= second + 1 ):
+                if (index/fps > second and index/fps <= second + 1/fps ):
                     cv2.imwrite(filename, cv2.cvtColor(input_image, cv2.COLOR_RGB2BGR))
                     print(filename)
                     frame_number +=1
-                elif (index/fps > second + fps/3 and index/fps <= second + fps/3 + 1):
+                elif (index/fps > second + 1./3 and index/fps <= second + 1./3 + 1/fps):
                     cv2.imwrite(filename, cv2.cvtColor(input_image, cv2.COLOR_RGB2BGR))
                     print(filename)
                     frame_number += 1
-                elif (index/fps > second + fps/3*2 and index/fps <= second + fps/3*2 + 1):
+                elif (index/fps > second + 1./3*2 and index/fps <= second + 1./3*2 + 1/fps):
                     cv2.imwrite(filename, cv2.cvtColor(input_image, cv2.COLOR_RGB2BGR))
                     print(filename)
                     frame_number += 1
