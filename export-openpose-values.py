@@ -245,14 +245,16 @@ for ivid,vid in enumerate(videos):
 
         for index in tqdm(range(nframes)):
             input_image = clip.load_frame()
+            second = math.floor(index/fps)
             try:
-                output_dict = process(input_image, params, model_params) 
-                frame = output_dict['canvas']
-                del output_dict['canvas']
-                output_dict.update({'video':vname, 'frame':index})
-                output_df = pd.DataFrame(pd.Series(output_dict)).transpose()
-                df = df.append(output_df)
-                clip.save_frame(frame)
+                if (index/fps > second and index/fps <= second + 1/fps ) or (index/fps > second + 1./3 and index/fps <= second + 1./3 + 1/fps) or (index/fps > second + 1./3*2 and index/fps <= second + 1./3*2 + 1/fps):
+                    output_dict = process(input_image, params, model_params) 
+                    frame = output_dict['canvas']
+                    del output_dict['canvas']
+                    output_dict.update({'video':vname, 'frame':index})
+                    output_df = pd.DataFrame(pd.Series(output_dict)).transpose()
+                    df = df.append(output_df)
+                    clip.save_frame(frame)
             except:
                 print('error during pose estimation')
         clip.close()
