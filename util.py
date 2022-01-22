@@ -16,14 +16,6 @@ def showmap(a, fmt='png'):
     PIL.Image.fromarray(a).save(f, fmt)
     display(Image(data=f.getvalue()))
 
-#def checkparam(param):
-#    octave = param['octave']
-#    starting_range = param['starting_range']
-#    ending_range = param['ending_range']
-#    assert starting_range <= ending_range, 'starting ratio should <= ending ratio'
-#    assert octave >= 1, 'octave should >= 1'
-#    return starting_range, ending_range, octave
-
 def getJetColor(v, vmin, vmax):
     c = np.zeros((3))
     if (v < vmin):
