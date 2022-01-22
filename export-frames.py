@@ -5,7 +5,7 @@ import time
 import numpy as np
 import glob
 import os
-import tqdm
+from tqdm import tqdm
 from videoprocessor import VideoProcessorSK
 
 parser = argparse.ArgumentParser()
@@ -14,7 +14,6 @@ parser.add_argument('--export_images_path', type=str, default='/content/drive/My
 parser.add_argument('--batch_num', type=int, default='123', help='batch number for subfolder of exported images')
 
 args = parser.parse_args()
-
 
 input_path = args.videos_path
 images_folder = args.export_images_path + "/images-batch-" + str(args.batch_num) + "/"
