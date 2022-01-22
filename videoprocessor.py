@@ -1,3 +1,5 @@
+import skvideo.io
+import skvideo
 class VideoProcessor(object):
     '''
     Base class for a video processing unit, 
