@@ -1,6 +1,3 @@
-import skvideo.io
-import skvideo
-
 class VideoProcessor(object):
     '''
     Base class for a video processing unit, 
@@ -53,7 +50,8 @@ class VideoProcessor(object):
         return self.i
     
     def frame_count(self):
-        return self.nframes  
+        return self.nframes
+        
                        
     def get_video(self):
         '''
@@ -72,6 +70,8 @@ class VideoProcessor(object):
         implement your own
         '''
         pass
+    
+
         
     def _read_frame(self):
         '''
@@ -126,5 +126,5 @@ class VideoProcessorSK(VideoProcessor):
         self.svid.writeFrame(frame)
     
     def close(self):
-        #self.svid.close()
+        self.svid.close()
         self.vid.close()

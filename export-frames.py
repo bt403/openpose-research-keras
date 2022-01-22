@@ -12,7 +12,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--videos_path', type=str, default='./sample_videos', help='path to saved videos')
 parser.add_argument('--export_images_path', type=str, default='/content/drive/MyDrive/ResearchProject/videos-bright-6', help='high level path to exported images')
 parser.add_argument('--batch_num', type=int, default='123', help='batch number for subfolder of exported images')
-
 args = parser.parse_args()
 
 input_path = args.videos_path
