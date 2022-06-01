@@ -7,6 +7,8 @@ import cv2
 from moviepy.editor import VideoFileClip
 import itertools
 import skvideo.io
+import argparse
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input_path', type=str, default='./data/processed/', help='path to saved videos')
