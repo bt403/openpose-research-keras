@@ -390,3 +390,42 @@ if os.path.exists(os.path.join(pose_estimates_path, 'pose_estimates.pkl'))==0:
     df = df_pkl.groupby(['video', 'frame']).apply(get_skel)
     df = edit_df(df, df_fps)
     df.to_pickle(os.path.join(pose_estimates_path, 'pose_estimates.pkl'))
+
+
+print("Processing estimates.pkl")
+pose_estimates_path = '/content/openpose-research-keras/data/estimates/'
+median_window = 1
+mean_window = 1
+delta_window = .25 # smoothing applied to delta_x, velocity, acceleration
+df = pd.read_pickle(os.path.join(pose_estimates_path, 'pose_estimates.pkl'))
+
+# normalise x and y by image length (conserve aspect ratio)
+df['x'] = pd.to_numeric(df['x'])
+df['y'] = pd.to_numeric(df['y'])
+df['x'] = (df['x'] - df['pixel_x']/2)/df['pixel_y']
+df['y'] = (df['y'] - df['pixel_y']/2)/df['pixel_y']
+
+# interpolate
+df = df.groupby(['video', 'bp']).apply(interpolate_df).reset_index(drop=True)
+
+# median and mean filter
+median_window = .5
+mean_window = .5
+
+df = df.groupby(['video', 'bp']).apply(lambda x: smooth(x, 'y', median_window, mean_window)).reset_index(drop=True)
+df = df.groupby(['video', 'bp']).apply(lambda x: smooth(x, 'x', median_window, mean_window)).reset_index(drop=True)
+
+# rotate and normalise by reference
+xdf = normalise_skeletons(df)
+
+# extract angles
+adf = get_joint_angles(xdf)
+
+# get dynamics
+xdf = get_dynamics_xy(xdf, delta_window)
+adf = get_dynamics_angle(adf,delta_window)
+
+# save
+xdf.to_pickle(os.path.join(pose_estimates_path, 'processed_pose_estimates_coords.pkl'))
+adf.to_pickle(os.path.join(pose_estimates_path, 'processed_pose_estimates_angles.pkl'))
+print("Processing completed")
