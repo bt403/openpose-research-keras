@@ -10,7 +10,7 @@ from videoprocessor import VideoProcessorSK
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--videos_path', type=str, default='./sample_videos', help='path to saved videos')
-parser.add_argument('--export_images_path', type=str, default='/content/drive/MyDrive/ResearchProject/exported_frames', help='high level path to exported images')
+parser.add_argument('--export_images_path', type=str, default='/content/drive/MyDrive/ResearchProject/exported_frames/', help='high level path to exported images')
 args = parser.parse_args()
 
 input_path = args.videos_path
@@ -58,21 +58,6 @@ for ivid,vid in enumerate(videos):
                     print(filename)
                     frame_number += 1
                 elif (index/fps > second + 1./3*2 and index/fps <= second + 1./3*2 + 1/fps):
-                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
-                    cv2.imwrite(filename, image)
-                    print(filename)
-                    frame_number += 1
-                elif (index/fps > second + 1./6 and index/fps <= second + 1./6 + 1/fps):
-                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
-                    cv2.imwrite(filename, image)
-                    print(filename)
-                    frame_number += 1
-                elif (index/fps > second + 5./6 and index/fps <= second + 5./6 + 1/fps):
-                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
-                    cv2.imwrite(filename, image)
-                    print(filename)
-                    frame_number += 1
-                elif (index/fps > second + 3./6 and index/fps <= second + 3./6 + 1/fps):
                     image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
                     cv2.imwrite(filename, image)
                     print(filename)
