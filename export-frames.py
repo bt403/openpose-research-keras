@@ -10,12 +10,11 @@ from videoprocessor import VideoProcessorSK
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--videos_path', type=str, default='./sample_videos', help='path to saved videos')
-parser.add_argument('--export_images_path', type=str, default='/content/drive/MyDrive/ResearchProject/videos-bright-6', help='high level path to exported images')
-parser.add_argument('--batch_num', type=int, default='123', help='batch number for subfolder of exported images')
+parser.add_argument('--export_images_path', type=str, default='/content/drive/MyDrive/ResearchProject/exported_frames', help='high level path to exported images')
 args = parser.parse_args()
 
 input_path = args.videos_path
-images_folder = args.export_images_path + "/images-batch-" + str(args.batch_num) + "/"
+images_folder = args.export_images_path
 videos = np.sort([fn for fn in glob.glob(input_path+'/*') if "Labeled" not in fn])
 print('filenames:')
 print(videos)
