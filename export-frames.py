@@ -63,6 +63,21 @@ for ivid,vid in enumerate(videos):
                     cv2.imwrite(filename, image)
                     print(filename)
                     frame_number += 1
+                elif (index/fps > second + 1./6 and index/fps <= second + 1./6 + 1/fps):
+                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+                    cv2.imwrite(filename, image)
+                    print(filename)
+                    frame_number += 1
+                elif (index/fps > second + 5./6 and index/fps <= second + 5./6 + 1/fps):
+                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+                    cv2.imwrite(filename, image)
+                    print(filename)
+                    frame_number += 1
+                elif (index/fps > second + 3./6 and index/fps <= second + 3./6 + 1/fps):
+                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+                    cv2.imwrite(filename, image)
+                    print(filename)
+                    frame_number += 1
             except Exception as e:
                 print(repr(e))
                 print('error during image extraction')
