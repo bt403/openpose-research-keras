@@ -14,8 +14,8 @@ parser.add_argument('--input_path', type=str, default='./data/processed/', help=
 parser.add_argument('--output_path', type=str, default='./data/estimates/', help='high level path to exported images')
 args = parser.parse_args()
 
-input_path = args.videos_path
-images_folder = args.export_images_path
+input_path = args.input_path
+images_folder = args.output_path
 
 raw_pose_estimates_video_path = args.input_path
 pose_estimates_path = args.output_path
