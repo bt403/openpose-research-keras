@@ -10,8 +10,8 @@ import itertools
 import skvideo.io
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_path', type=str, default='./data/processed/', help='path to saved videos')
-parser.add_argument('--output_path', type=str, default='./data/estimates/', help='high level path to exported images')
+parser.add_argument('--input_path', type=str, default='/content/openpose-research-keras/data/processed/', help='path to saved videos')
+parser.add_argument('--output_path', type=str, default='/content/openpose-research-keras/data/estimates/', help='high level path to exported images')
 args = parser.parse_args()
 
 input_path = args.input_path
