@@ -65,6 +65,6 @@ for ivid,vid in enumerate(videos):
             except Exception as e:
                 print(repr(e))
                 print('error during image extraction')
-        clip.close()
+        #clip.close()
         toc = time.time()
         print ('processing time is %.5f' % (toc - tic))
