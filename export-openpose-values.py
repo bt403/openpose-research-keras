@@ -19,7 +19,7 @@ from constants import limbSeq, mapIdx, colors
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--videos_path', type=str, default='./sample_videos', help='path to saved videos')
-parser.add_argument('--model_path', type=str, default='./model/keras/model.h5', help='path to model')
+parser.add_argument('--model_path', type=str, default='./model/model.h5', help='path to model')
 args = parser.parse_args()
 
 def process (input_image, params, model_params):
