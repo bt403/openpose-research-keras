@@ -152,6 +152,16 @@ for image in list_frame_images:
     angle_RElbow = values_RElbow['angle'].iloc[0]
   else:
     angle_RElbow = None
+  values_LShoulder = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'LShoulder') & (df_angle['video'] == video_name_max)]
+  if not values_LShoulder.empty:
+    angle_LShoulder = values_LShoulder['angle'].iloc[0]
+  else:
+    angle_LShoulder = None
+  values_RShoulder = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'RShoulder') & (df_angle['video'] == video_name_max)]
+  if not values_RShoulder.empty:
+    angle_RShoulder = values_RShoulder['angle'].iloc[0]
+  else:
+    angle_RShoulder = None
 
   #Check frame number exists on data, else use previous frame number
   df_frame = df_real_pos.loc[(df_real_pos['frame'] == int(frame_num)) & (df_real_pos['video'] == video_name_max)]
@@ -586,8 +596,8 @@ for image in list_frame_images:
   coord_LEar_Exists = np.isnan(df.loc[(df['frame'] == int(frame_num)) & (df['bp'] == 'LEar') & (df['video'] == video_name_max)]['x'].iloc[0]) == False
   coord_Nose_Exists = np.isnan(df.loc[(df['frame'] == int(frame_num)) & (df['bp'] == 'Nose') & (df['video'] == video_name_max)]['x'].iloc[0]) == False
 
-  row_data = [L1_dist, L1_dist_x, L1_dist_y, L2_dist, L2_dist_x, L2_dist_y, L3_dist, L3_dist_x, L3_dist_y, L4_dist, L4_dist_x, L4_dist_y, L5_dist, L5_dist_x, L5_dist_y, L6_dist, L6_dist_x, L6_dist_y, L7_dist, L7_dist_x, L7_dist_y, L8_dist, L8_dist_x, L8_dist_y, L9_dist, L9_dist_x, L9_dist_y, L10_dist, L10_dist_x, L10_dist_y, L11_dist, L11_dist_x, L11_dist_y, L12_dist, L12_dist_x, L12_dist_y, speed_LWrist, speed_RWrist, angle_LElbow, angle_RElbow, displacement_RWrist, displacement_LWrist, displacement_RElbow, displacement_LElbow, speed_RElbow, speed_LElbow, acceleration_RWrist_x, acceleration_RWrist_y, acceleration_LWrist_x, acceleration_LWrist_y, coord_REye_Exists, coord_LEye_Exists, coord_REar_Exists, coord_LEar_Exists, coord_Nose_Exists, coordX, coordY, size, orientation, path, path_cropped]
-  columns += ['L1_dist', 'L1_dist_x', 'L1_dist_y', 'L2_dist', 'L2_dist_x', 'L2_dist_y', 'L3_dist', 'L3_dist_x', 'L3_dist_y', 'L4_dist', 'L4_dist_x', 'L4_dist_y', 'L5_dist', 'L5_dist_x', 'L5_dist_y', 'L6_dist', 'L6_dist_x', 'L6_dist_y', 'L7_dist', 'L7_dist_x', 'L7_dist_y', 'L8_dist', 'L8_dist_x', 'L8_dist_y', 'L9_dist', 'L9_dist_x', 'L9_dist_y', 'L10_dist', 'L10_dist_x', 'L10_dist_y', 'L11_dist', 'L11_dist_x', 'L11_dist_y', 'L12_dist', 'L12_dist_x', 'L12_dist_y', 'speed_LWrist', 'speed_RWrist', 'angle_LElbow', 'angle_RElbow', 'displacement_RWrist', 'displacement_LWrist', 'displacement_RElbow', 'displacement_LElbow', 'speed_RElbow', 'speed_LElbow', 'acceleration_RWrist_x', 'acceleration_RWrist_y', 'acceleration_LWrist_x', 'acceleration_LWrist_y', 'coord_REye_Exists', 'coord_LEye_Exists', 'coord_REar_Exists', 'coord_LEar_Exists', 'coord_Nose_Exists', 'coordX', 'coordY', 'size', 'orientation', 'path', 'path_cropped']
+  row_data = [L1_dist, L1_dist_x, L1_dist_y, L2_dist, L2_dist_x, L2_dist_y, L3_dist, L3_dist_x, L3_dist_y, L4_dist, L4_dist_x, L4_dist_y, L5_dist, L5_dist_x, L5_dist_y, L6_dist, L6_dist_x, L6_dist_y, L7_dist, L7_dist_x, L7_dist_y, L8_dist, L8_dist_x, L8_dist_y, L9_dist, L9_dist_x, L9_dist_y, L10_dist, L10_dist_x, L10_dist_y, L11_dist, L11_dist_x, L11_dist_y, L12_dist, L12_dist_x, L12_dist_y, speed_LWrist, speed_RWrist, angle_LElbow, angle_RElbow, angle_LShoulder, angle_RShoulder, displacement_RWrist, displacement_LWrist, displacement_RElbow, displacement_LElbow, speed_RElbow, speed_LElbow, acceleration_RWrist_x, acceleration_RWrist_y, acceleration_LWrist_x, acceleration_LWrist_y, coord_REye_Exists, coord_LEye_Exists, coord_REar_Exists, coord_LEar_Exists, coord_Nose_Exists, coordX, coordY, size, orientation, path, path_cropped]
+  columns += ['L1_dist', 'L1_dist_x', 'L1_dist_y', 'L2_dist', 'L2_dist_x', 'L2_dist_y', 'L3_dist', 'L3_dist_x', 'L3_dist_y', 'L4_dist', 'L4_dist_x', 'L4_dist_y', 'L5_dist', 'L5_dist_x', 'L5_dist_y', 'L6_dist', 'L6_dist_x', 'L6_dist_y', 'L7_dist', 'L7_dist_x', 'L7_dist_y', 'L8_dist', 'L8_dist_x', 'L8_dist_y', 'L9_dist', 'L9_dist_x', 'L9_dist_y', 'L10_dist', 'L10_dist_x', 'L10_dist_y', 'L11_dist', 'L11_dist_x', 'L11_dist_y', 'L12_dist', 'L12_dist_x', 'L12_dist_y', 'speed_LWrist', 'speed_RWrist', 'angle_LElbow', 'angle_RElbow', 'angle_LShoulder', 'angle_RShoulder', 'displacement_RWrist', 'displacement_LWrist', 'displacement_RElbow', 'displacement_LElbow', 'speed_RElbow', 'speed_LElbow', 'acceleration_RWrist_x', 'acceleration_RWrist_y', 'acceleration_LWrist_x', 'acceleration_LWrist_y', 'coord_REye_Exists', 'coord_LEye_Exists', 'coord_REar_Exists', 'coord_LEar_Exists', 'coord_Nose_Exists', 'coordX', 'coordY', 'size', 'orientation', 'path', 'path_cropped']
 
   #Hand and Finger detection
   with mp_hands.Hands(
@@ -698,36 +708,6 @@ for image in list_frame_images:
         columns_hand.append(L3_dist)
     id_c += 1
   columns += columns_hand
-  #Set values for Elbow angles
-  values_LElbow = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'LElbow') & (df_angle['video'] == video_name_max)]
-  if not values_LElbow.empty:
-    angle_LElbow = values_LElbow['angle'].iloc[0]
-  else:
-    angle_LElbow = None
-  values_RElbow = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'RElbow') & (df_angle['video'] == video_name_max)]
-  if not values_RElbow.empty:
-    angle_RElbow = values_RElbow['angle'].iloc[0]
-  else:
-    angle_RElbow = None
-  values_LShoulder = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'LShoulder') & (df_angle['video'] == video_name_max)]
-  if not values_LShoulder.empty:
-    angle_LShoulder = values_LShoulder['angle'].iloc[0]
-  else:
-    angle_LShoulder = None
-  values_RShoulder = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'RShoulder') & (df_angle['video'] == video_name_max)]
-  if not values_RShoulder.empty:
-    angle_RShoulder = values_RShoulder['angle'].iloc[0]
-  else:
-    angle_RShoulder = None
-
-  row_data.append(angle_RShoulder)
-  columns.append("angle_RShoulder")
-  row_data.append(angle_LShoulder)
-  columns.append("angle_LShoulder")
-  row_data.append(angle_RElbow)
-  columns.append("angle_RElbow")
-  row_data.append(angle_LElbow)
-  columns.append("angle_LElbow")
 
   #Add targets to data
   found_target = False
@@ -778,10 +758,8 @@ for image in list_frame_images:
   frame_num_old = frame_num
 
 pdata = pd.DataFrame(data, columns=columns)
-print(pdata["angle_LShoulder"])
-print(pdata["angle_LElbow"])
-pdata["sumAnglesL"] = pd.to_numeric(pdata["angle_LShoulder"]) + pd.to_numeric(pdata["angle_LElbow"])
-pdata["sumAnglesR"] = pd.to_numeric(pdata["angle_RShoulder"]) + pd.to_numeric(pdata["angle_RElbow"])
+pdata["sumAnglesL"] = pdata["angle_LShoulder"] + pdata["angle_LElbow"]
+pdata["sumAnglesR"] = pdata["angle_RShoulder"] + pdata["angle_RElbow"]
 
 pdata.to_pickle(output_path)
 print(data)
