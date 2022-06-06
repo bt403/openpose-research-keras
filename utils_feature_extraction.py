@@ -29,7 +29,7 @@ def removeOutliers(group):
     c+=1
   return group
 
-def getBoxCoordinates(coord_HipX, coord_HipY, coord_NeckX, coord_NeckY, pixel_x, pixel_y, orientation):
+def getBoxCoordinates(coord_HipX, coord_HipY, coord_NeckX, coord_NeckY, pixel_x, pixel_y, orientation=None):
   if (coord_HipX is None or coord_HipY is None or coord_NeckX is None or coord_NeckY is None):
     return (None, None, None)
   distX = abs(coord_HipX - coord_NeckX)
@@ -45,13 +45,13 @@ def getBoxCoordinates(coord_HipX, coord_HipY, coord_NeckX, coord_NeckY, pixel_x,
     #Horizontal Baby
     if (coord_HipX > coord_NeckX):
       orientation_new = 270
-      if orientation_new == orientation:
+      if orientation_new == orientation or orientation is None:
         #Head to the Left, Hip to the Right
         coordX = coord_NeckX - dist*1.5
         coordY = coord_NeckY - dist
     else:
       orientation_new = 90
-      if orientation_new == orientation:
+      if orientation_new == orientation or orientation is None:
         #Head to the Right, Hip to the Left
         coordX = coord_NeckX - dist*0.5
         coordY = coord_NeckY - dist
@@ -59,15 +59,15 @@ def getBoxCoordinates(coord_HipX, coord_HipY, coord_NeckX, coord_NeckY, pixel_x,
     #Vertical Baby
     if (coord_HipY > coord_NeckY):
       #Head on the top
-      if orientation_new == orientation:
+      if orientation_new == orientation or orientation is None:
         coordY = coord_NeckY - dist*1.5
         coordX = coord_NeckX - dist
     else:
       #Head upside down
-      if orientation_new == orientation:
+      if orientation_new == orientation or orientation is None:
         coordY = coord_NeckY - dist*0.5
         coordX = coord_NeckX - dist
-  if orientation_new == orientation:
+  if orientation_new == orientation or orientation is None:
     if (coordX < 0):
       coordX = 0
     if (coordY < 0):
@@ -76,9 +76,10 @@ def getBoxCoordinates(coord_HipX, coord_HipY, coord_NeckX, coord_NeckY, pixel_x,
       coordX = int(pixel_x) - size
     if (coordY + size > int(pixel_y)):
       coordY = int(pixel_y) - size
-    return (coordX, coordY, size)
+    return (coordX, coordY, size, orientation_new)
   else:
-    return (None, None, None)
+    return (None, None, None, orientation_new)
+
 
 def addMinMax(df):
   df['min_x'] = df[x_columns].min(axis=1)
@@ -90,24 +91,25 @@ def addMinMax(df):
 def getFaces(df, y_max, x_max, eyeLeft, eyeRight, neck, coordX, coordY, size, angle, limit=False, video_name=None, video_name_now=None):
   faces = []
   not_changed_video = True
-  for index, f in df.iterrows():
-      height = int(f["max_x"]) - int(f["min_x"])
-      width = int(f["max_y"]) - int(f["min_y"])
-      if (f["confidence"] > 0.1):
-        if angle == 0:
-          face_coords = (f["min_x"], f["min_y"], f["max_x"], f["max_y"], f["eye_lmk_x_1"], f["eye_lmk_y_1"], f["eye_lmk_x_31"], f["eye_lmk_y_31"], f["confidence"])
-        elif angle == 270:
-          face_coords = (f["min_y"], x_max - int(f["min_x"]) - width, f["max_y"], x_max - int(f["max_x"]) + width, f["eye_lmk_y_1"], x_max - int(f["eye_lmk_x_1"]), f["eye_lmk_y_31"], x_max - int(f["eye_lmk_x_31"]), f["confidence"])
-        else:
-          face_coords = (y_max - int(f["min_y"]) - height, int(f["min_x"]), y_max - int(f["max_y"]) + height, int(f["max_x"]), y_max - int(f["eye_lmk_y_1"]), f["eye_lmk_x_1"], y_max - int(f["eye_lmk_y_31"]), f["eye_lmk_x_31"], f["confidence"])
-        if (limit):
-          if (video_name_now != video_name):
-            not_changed_video = False # check that faces are from the same video. If new video, stop searching
-          elif (face_coords[0] >= coordX and face_coords[1] >= coordY and face_coords[2] < coordX + size and face_coords[3] < coordY + size):
-            faces.append(face_coords)
-        else:
-          if (face_coords[0] >= coordX and face_coords[1] >= coordY and face_coords[2] < coordX + size and face_coords[3] < coordY + size):
-            faces.append(face_coords)
+  if df is not None:
+    for index, f in df.iterrows():
+        height = int(f["max_x"]) - int(f["min_x"])
+        width = int(f["max_y"]) - int(f["min_y"])
+        if (f["confidence"] > 0.1):
+          if angle == 0:
+            face_coords = (f["min_x"], f["min_y"], f["max_x"], f["max_y"], f["eye_lmk_x_1"], f["eye_lmk_y_1"], f["eye_lmk_x_31"], f["eye_lmk_y_31"], f["confidence"])
+          elif angle == 270:
+            face_coords = (f["min_y"], x_max - int(f["min_x"]) - width, f["max_y"], x_max - int(f["max_x"]) + width, f["eye_lmk_y_1"], x_max - int(f["eye_lmk_x_1"]), f["eye_lmk_y_31"], x_max - int(f["eye_lmk_x_31"]), f["confidence"])
+          else:
+            face_coords = (y_max - int(f["min_y"]) - height, int(f["min_x"]), y_max - int(f["max_y"]) + height, int(f["max_x"]), y_max - int(f["eye_lmk_y_1"]), f["eye_lmk_x_1"], y_max - int(f["eye_lmk_y_31"]), f["eye_lmk_x_31"], f["confidence"])
+          if (limit):
+            if (video_name_now != video_name):
+              not_changed_video = False # check that faces are from the same video. If new video, stop searching
+            elif (face_coords[0] >= coordX and face_coords[1] >= coordY and face_coords[2] < coordX + size and face_coords[3] < coordY + size):
+              faces.append(face_coords)
+          else:
+            if (face_coords[0] >= coordX and face_coords[1] >= coordY and face_coords[2] < coordX + size and face_coords[3] < coordY + size):
+              faces.append(face_coords)
   if (len(faces) == 0):
     if (not np.isnan(eyeLeft[0]) or not np.isnan(eyeRight[0])):
       if (np.isnan(eyeLeft[0])):
