@@ -24,47 +24,44 @@ for ivid,vid in enumerate(videos):
     print(vid)
     vidname = os.path.basename(vid)
     vname = vidname.split('.')[0]
-    
-    if os.path.isfile(os.path.join(input_path,vname + '_openposeLabeled.mp4')):
-        print("Labeled video already created.")
-    else:
-        # break into frames
-        clip = VideoProcessorSK(fname = os.path.join(input_path,vidname),sname = os.path.join(input_path,vname + '_openposeLabeled.mp4'))# input name, output name
-        ny = clip.height()
-        nx = clip.width()
-        fps = clip.fps()
-        nframes = clip.frame_count()
-        duration = nframes/fps
-        print("Duration of video [s]: ", duration, ", recorded with ", fps,
-              "fps!")
-        print("Overall # of frames: ", nframes, "with frame dimensions: ",
-              ny,nx)
-        print("Generating frames")
-        frame_number = 1
-        for index in tqdm(range(nframes)):
-            input_image = clip.load_frame()
-            second = math.floor(index/fps)
-            try:
-                real_frame_number = index
-                filename = images_folder + vname + "_" + str(real_frame_number) + "_" + str(frame_number) + ".jpg"
-                if (index/fps > second and index/fps <= second + 1/fps ):
-                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
-                    cv2.imwrite(filename, image)
-                    print(filename)
-                    frame_number +=1
-                elif (index/fps > second + 1./3 and index/fps <= second + 1./3 + 1/fps):
-                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
-                    cv2.imwrite(filename, image)
-                    print(filename)
-                    frame_number += 1
-                elif (index/fps > second + 1./3*2 and index/fps <= second + 1./3*2 + 1/fps):
-                    image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
-                    cv2.imwrite(filename, image)
-                    print(filename)
-                    frame_number += 1
-            except Exception as e:
-                print(repr(e))
-                print('error during image extraction')
-        #clip.close()
-        toc = time.time()
-        print ('processing time is %.5f' % (toc - tic))
+
+    # break into frames
+    clip = VideoProcessorSK(fname = os.path.join(input_path,vidname),sname = os.path.join(input_path,vname + '_openposeLabeled.mp4'))# input name, output name
+    ny = clip.height()
+    nx = clip.width()
+    fps = clip.fps()
+    nframes = clip.frame_count()
+    duration = nframes/fps
+    print("Duration of video [s]: ", duration, ", recorded with ", fps,
+            "fps!")
+    print("Overall # of frames: ", nframes, "with frame dimensions: ",
+            ny,nx)
+    print("Generating frames")
+    frame_number = 1
+    for index in tqdm(range(nframes)):
+        input_image = clip.load_frame()
+        second = math.floor(index/fps)
+        try:
+            real_frame_number = index
+            filename = images_folder + vname + "_" + str(real_frame_number) + "_" + str(frame_number) + ".jpg"
+            if (index/fps > second and index/fps <= second + 1/fps ):
+                image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+                cv2.imwrite(filename, image)
+                print(filename)
+                frame_number +=1
+            elif (index/fps > second + 1./3 and index/fps <= second + 1./3 + 1/fps):
+                image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+                cv2.imwrite(filename, image)
+                print(filename)
+                frame_number += 1
+            elif (index/fps > second + 1./3*2 and index/fps <= second + 1./3*2 + 1/fps):
+                image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+                cv2.imwrite(filename, image)
+                print(filename)
+                frame_number += 1
+        except Exception as e:
+            print(repr(e))
+            print('error during image extraction')
+    #clip.close()
+    toc = time.time()
+    print ('processing time is %.5f' % (toc - tic))
