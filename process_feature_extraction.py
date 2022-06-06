@@ -778,6 +778,8 @@ for image in list_frame_images:
   frame_num_old = frame_num
 
 pdata = pd.DataFrame(data, columns=columns)
+print(pdata["angle_LShoulder"])
+print(pdata["angle_LElbow"])
 pdata["sumAnglesL"] = pdata["angle_LShoulder"] + pdata["angle_LElbow"]
 pdata["sumAnglesR"] = pdata["angle_RShoulder"] + pdata["angle_RElbow"]
 
