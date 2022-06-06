@@ -647,5 +647,6 @@ def runCrossValidationSVM(results, x_data, x_data_test, target_val, model_name, 
   print("--- Running Cross Validation for " + str(model_name) + " and target type: " + str(target_val) + " ---")
   filtered_columns = getFeatures(x_data, target_val)
   params = getBestParams(x_data[filtered_columns], x_data[target_val], weights, binary=binary)#, groups=x_data["video_name"])
-  train_svm(results, x_data[filtered_columns], x_data[target_val], x_data_test[filtered_columns], x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary, with_pca=True)
+  #train_svm(results, x_data[filtered_columns], x_data[target_val], x_data_test[filtered_columns], x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary, with_pca=True)
+  train_svm(results, x_data[filtered_columns], x_data[target_val], x_data_test[filtered_columns], None, model_name, params, x_data["video_name"], weights, False, binary, with_pca=True)
 
