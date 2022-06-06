@@ -17,6 +17,9 @@ ppc = 16
 parser = argparse.ArgumentParser()
 parser.add_argument('--processed_features', type=str, default='./data/estimates/processed_features.pkl')
 parser.add_argument('--output_path', type=str, default='./data/estimates/')
+parser.add_argument('--eyes_folder', type=str, default="/content/drive/MyDrive/ResearchProject/eyes/")
+parser.add_argument('--mouth_folder', type=str, default="/content/drive/MyDrive/ResearchProject/mouth/")
+
 args = parser.parse_args()
 
 output_path = args.output_path
@@ -34,13 +37,11 @@ pdata = pd.read_pickle(args.processed_features)
 
 for i, row in pdata.iterrows():
   print(i)
-  if i < 75 or i >76:
-    continue
   path = row['path_cropped']
   print(path)
   img_name = "_".join(path.split("/")[-1].split("_")[1:-1]) + ".jpg"
-  path_eyes = "/content/drive/MyDrive/ResearchProject/eyes/" + img_name
-  path_mouth = "/content/drive/MyDrive/ResearchProject/mouth/" + img_name
+  path_eyes = eyes_folder + img_name
+  path_mouth = mouth_folder + img_name
 
   fd, fd_flipped, image_1 = getHogFeatures(path)
   fd_eyes, fd_eyes_flipped, image_2 = getHogFeatures(path_eyes, (128,64))
