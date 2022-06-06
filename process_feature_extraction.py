@@ -17,13 +17,14 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--exported_frames', type=str, default='/content/drive/MyDrive/ResearchProject/exported_frames/')
 parser.add_argument('--cropped_output_path', type=str, default='/content/drive/MyDrive/ResearchProject/cropped/')
-parser.add_argument('--csv_data', type=str, default='/content/openpose-research-keras/data_full_csv_v2.csv')
+parser.add_argument('--csv_data', type=str, default='/content/openpose-research-keras/data_full_csv.csv')
+parser.add_argument('--pose_estimates', type=str, default='/content/openpose-research-keras/data/estimates/')
 args = parser.parse_args()
 
 dir_path = args.exported_frames
 target_path = args.csv_data
 folder_cropped = args.cropped_output_path
-pose_estimates_path = '/content/openpose-research-keras/data/estimates/'
+pose_estimates_path = args.pose_estimates
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
