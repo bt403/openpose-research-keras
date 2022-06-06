@@ -603,7 +603,7 @@ for image in list_frame_images:
       sizeX = coordX_max - coordX
       sizeY = coordY_max - coordY
 
-    results_hand_locations = getHandData(file_full, orientation, size, coordX, coordY, sizeX, sizeY, c)
+    results_hand_locations = getHandData(hands, file_full, orientation, size, coordX, coordY, sizeX, sizeY, c)
   
   id_c = 0
   for i in results_hand_locations:

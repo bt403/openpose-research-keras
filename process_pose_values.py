@@ -1,4 +1,3 @@
-import argparse
 import pandas as pd
 import glob
 import numpy as np
@@ -8,10 +7,11 @@ import cv2
 from moviepy.editor import VideoFileClip
 import itertools
 import skvideo.io
+import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_path', type=str, default='./data/processed/', help='path to saved videos')
-parser.add_argument('--output_path', type=str, default='./data/estimates/', help='high level path to exported images')
+parser.add_argument('--input_path', type=str, default='./data/processed/')
+parser.add_argument('--output_path', type=str, default='./data/estimates/')
 args = parser.parse_args()
 
 input_path = args.input_path

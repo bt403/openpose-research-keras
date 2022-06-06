@@ -287,7 +287,7 @@ def alignFace(rightEyeCenter, leftEyeCenter, neck, size, image_s, orientation, y
   output = cv2.warpAffine(image_s, M, (w, h), flags=cv2.INTER_CUBIC)
   return output
   
-def getHandData(file_full, orientation, size, coordX, coordY, sizeX, sizeY, idx):     
+def getHandData(hands, file_full, orientation, size, coordX, coordY, sizeX, sizeY, idx):     
   hand_found_R = np.nan
   hand_found_L = np.nan
   origin_x_hand_L = np.nan
