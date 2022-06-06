@@ -780,8 +780,8 @@ for image in list_frame_images:
 pdata = pd.DataFrame(data, columns=columns)
 print(pdata["angle_LShoulder"])
 print(pdata["angle_LElbow"])
-pdata["sumAnglesL"] = pdata["angle_LShoulder"] + pdata["angle_LElbow"]
-pdata["sumAnglesR"] = pdata["angle_RShoulder"] + pdata["angle_RElbow"]
+pdata["sumAnglesL"] = pd.to_numeric(pdata["angle_LShoulder"]) + pd.to_numeric(pdata["angle_LElbow"])
+pdata["sumAnglesR"] = pd.to_numeric(pdata["angle_RShoulder"]) + pd.to_numeric(pdata["angle_RElbow"])
 
 pdata.to_pickle(output_path)
 print(data)
