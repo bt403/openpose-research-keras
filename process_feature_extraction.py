@@ -46,7 +46,6 @@ df_real_pos = df_real_pos.groupby(['video', "bp"]).apply(removeOutliers)
 df_angle = pd.read_pickle(os.path.join(pose_estimates_path, 'processed_pose_estimates_angles.pkl'))
 
 list_frame_images = sorted(os.listdir(dir_path))
-columns = []
 
 data_target = []
 with open(target_path, newline='') as f:
@@ -92,6 +91,7 @@ coord_hand_y_R_old = np.nan
 
 for image in list_frame_images:
   print(c)
+  columns = []
   c+=1
   image_name = image
   split_img = image.split('_')
@@ -755,6 +755,8 @@ for image in list_frame_images:
 
   data.append(row_data)
   print(row_data)
+  print(len(columns))
+  print(len(row_data))
 
   #Clear Old Values
   id_c = 0
