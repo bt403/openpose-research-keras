@@ -28,6 +28,7 @@ for i in targets:
   
   #############
   weights = "balanced"
+  binary = True
   if not isinstance(i, str):
     train = train[train["target"] == "on-head"]
     test = test[test["target"] == "on-head"]
