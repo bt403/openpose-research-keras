@@ -14,6 +14,51 @@ from keras.models import Sequential
 from keras.layers import Dense
 from sklearn.multiclass import OneVsOneClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from skmultilearn.problem_transform import LabelPowerset
+from sklearn.impute import SimpleImputer
+from sklearn.model_selection import train_test_split, GridSearchCV
+from statistics import mean, median
+from sklearn.model_selection import cross_validate
+from sklearn.ensemble import RandomForestClassifier
+
+def get_columns_hand():
+  columns_hand = []
+  id_c = 0
+  results_hand_locations_list = ["hand_found_R", "hand_found_L", "origin_x_hand_L", "origin_y_hand_L", "origin_x_hand_R", "origin_y_hand_R",
+          "thumb_finger_x_hand_L", "thumb_finger_y_hand_L", "thumb_finger_x_hand_R", "thumb_finger_y_hand_R",
+  "index_finger_x_hand_L", "index_finger_y_hand_L", "index_finger_x_hand_R", "index_finger_y_hand_R",
+ "middle_finger_x_hand_L", "middle_finger_y_hand_L", "middle_finger_x_hand_R", "middle_finger_y_hand_R",
+ "ring_finger_x_hand_L", "ring_finger_y_hand_L", "ring_finger_x_hand_R", "ring_finger_y_hand_R", 
+ "pinky_finger_x_hand_L", "pinky_finger_y_hand_L", "pinky_finger_x_hand_R", "pinky_finger_y_hand_R"]
+  for i in results_hand_locations_list:
+    if id_c < 2:
+      continue
+    else:
+      if (id_c%2 == 0): #x coordinate
+        i2 = results_hand_locations_list[id_c+1]
+        #To Right Eye
+        L1_dist_x = "Lcoord_REyeX_" + i
+        L1_dist_y = "Lcoord_REyeY_" + i2
+        L1_dist = "Lcoord_REye_" + i.replace("_x", "").replace("_y", "")
+        #To Left Eye
+        L2_dist_x = "Lcoord_LEyeX_" + i
+        L2_dist_y = "Lcoord_LEyeY_" + i2
+        L2_dist = "Lcoord_LEye_" + i.replace("_x", "").replace("_y", "")
+        #To Nose
+        L3_dist_x = "Lcoord_NoseX_" + i
+        L3_dist_y = "Lcoord_NoseY_" + i2
+        L3_dist = "Lcoord_Nose_" + i.replace("_x", "").replace("_y", "")
+        columns_hand.append(L1_dist_x)
+        columns_hand.append(L1_dist_y)
+        columns_hand.append(L1_dist)
+        columns_hand.append(L2_dist_x)
+        columns_hand.append(L2_dist_y)
+        columns_hand.append(L2_dist)
+        columns_hand.append(L3_dist_x)
+        columns_hand.append(L3_dist_y)
+        columns_hand.append(L3_dist)
+  id_c += 1
 
 def create_model_multiclass(input_dim, output_dim):
     # create model
@@ -61,7 +106,7 @@ def calculate_significance_test(table):
   else:
     print('Different proportions of errors (reject H0)')
 
-def train_svm(x_train, y_train, x_test, y_test, result_name, params, groups, weights="balanced", inverse=False, binary=True, with_pca=False):
+def train_svm(results, x_train, y_train, x_test, y_test, result_name, params, groups, weights="balanced", inverse=False, binary=True, with_pca=False):
   # Validation Set - 5 Fold CV
   splitter = GroupKFold(n_splits=5)
   if binary:
@@ -266,25 +311,10 @@ def train_svm(x_train, y_train, x_test, y_test, result_name, params, groups, wei
       results[result_name][key].append("F1 Score Outside Target" + " - " + str(2*precision_outside_target*recall_outside_target/(precision_outside_target + recall_outside_target)))
 
 
-import matplotlib.pyplot as plt
-plt.rcParams['figure.figsize'] = [8, 8]
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from skmultilearn.problem_transform import BinaryRelevance
-from sklearn.feature_selection import SelectFromModel
-from statistics import mean, median
-from sklearn.model_selection import cross_validate
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.impute import SimpleImputer
-from skmultilearn.problem_transform import LabelPowerset
-from skmultilearn.ensemble import RakelD, RakelO
-from sklearn.naive_bayes import GaussianNB
-from sklearn.multiclass import OneVsRestClassifier
-
 columns_filter_distances = [ "L1_dist", "L1_dist_x", "L1_dist_y", "L2_dist", "L2_dist_x", "L2_dist_y", "L3_dist", "L3_dist_x", "L3_dist_y", "L4_dist", "L4_dist_x", "L4_dist_y", "L5_dist", "L5_dist_x", "L5_dist_y", "L6_dist", "L6_dist_x", "L6_dist_y", "L7_dist", "L7_dist_x", "L7_dist_y", "L8_dist", "L8_dist_x", "L8_dist_y", "L9_dist", "L9_dist_x", "L9_dist_y", "L10_dist", "L10_dist_x", "L10_dist_y", "L11_dist", "L11_dist_x", "L11_dist_y", "L12_dist", "L12_dist_x", "L12_dist_y", "coord_REye_Exists", "coord_LEye_Exists", "coord_REar_Exists", "coord_LEar_Exists", "coord_Nose_Exists"]
 columns_filter_angular = ["angle_LElbow", "angle_RElbow", "sumAnglesR", "sumAnglesL", "angle_RShoulder", "angle_LShoulder"]
 columns_filter_temporal = ["speed_LWrist", "speed_RWrist", "speed_RElbow", "speed_LElbow", "displacement_RWrist", "displacement_LWrist", "displacement_RElbow", "displacement_LElbow", "acceleration_RWrist_x", "acceleration_RWrist_y", "acceleration_LWrist_x", "acceleration_LWrist_y"]
+columns_hand = get_columns_hand()
 columns_filter_hands =  ["hand_found_L", "hand_found_R"] + columns_hand
 imp = SimpleImputer(missing_values=np.nan, strategy='median')
 
@@ -293,7 +323,7 @@ def featureSelection(data, columns_v, target_val, ratio=1.0):
   RFC = RandomForestClassifier(n_estimators = 200, random_state=1)
   pipeline = Pipeline(steps=[('i', imp), ("scale", StandardScaler()), ('m', RFC)])
 
-  cv_rfc = cross_validate(pipeline, train[columns_v], train[target_val], cv = 5, scoring = 'accuracy', groups=train["video_name"], return_estimator =True)
+  cv_rfc = cross_validate(pipeline, data[columns_v], data[target_val], cv = 5, scoring = 'accuracy', groups=data["video_name"], return_estimator =True)
   feature_importances = cv_rfc['estimator'][0].steps[2][1].feature_importances_
   print(feature_importances)
   count = 1
@@ -609,4 +639,4 @@ def runCrossValidationSVM(x_data, x_data_test, target_val, model_name, weights="
   filtered_columns = getFeatures(x_data, target_val)
   params = getBestParams(x_data[filtered_columns], x_data[target_val], weights, binary=binary, groups=x_data["video_name"])
   train_svm(x_data[filtered_columns], x_data[target_val], x_data_test[filtered_columns], x_data_test[target_val], model_name, params, x_data["video_name"], weights, inverse, binary, with_pca=True)
-  
+

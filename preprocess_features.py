@@ -1,6 +1,7 @@
 import numpy as np
 import argparse
 import pandas as pd
+from util_classifier_training import get_columns_hand
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--processed_features', type=str, default='./data/estimates/processed_features.pkl')
@@ -16,42 +17,7 @@ columns_filter = [x for x in columns if x not in ["video_name", "coordX", "coord
 columns_filter_without_angle = [x for x in columns_filter if x not in ["angle_LElbow", "angle_RElbow", "angle_LShoulder", "angle_RShoulder"]]
 columns_filter_without_bool = [x for x in columns_filter if x not in ["coord_REye_Exists", "coord_LEye_Exists", "coord_REar_Exists", "coord_LEar_Exists", "coord_Nose_Exists"]]
 columns_with_target = columns
-columns_hand = []
-id_c = 0
-results_hand_locations_list = ["hand_found_R", "hand_found_L", "origin_x_hand_L", "origin_y_hand_L", "origin_x_hand_R", "origin_y_hand_R",
-          "thumb_finger_x_hand_L", "thumb_finger_y_hand_L", "thumb_finger_x_hand_R", "thumb_finger_y_hand_R",
-  "index_finger_x_hand_L", "index_finger_y_hand_L", "index_finger_x_hand_R", "index_finger_y_hand_R",
- "middle_finger_x_hand_L", "middle_finger_y_hand_L", "middle_finger_x_hand_R", "middle_finger_y_hand_R",
- "ring_finger_x_hand_L", "ring_finger_y_hand_L", "ring_finger_x_hand_R", "ring_finger_y_hand_R", 
- "pinky_finger_x_hand_L", "pinky_finger_y_hand_L", "pinky_finger_x_hand_R", "pinky_finger_y_hand_R"]
-for i in results_hand_locations_list:
-  if id_c < 2:
-    columns.append(i)
-  else:
-    if (id_c%2 == 0): #x coordinate
-      i2 = results_hand_locations_list[id_c+1]
-      #To Right Eye
-      L1_dist_x = "Lcoord_REyeX_" + i
-      L1_dist_y = "Lcoord_REyeY_" + i2
-      L1_dist = "Lcoord_REye_" + i.replace("_x", "").replace("_y", "")
-      #To Left Eye
-      L2_dist_x = "Lcoord_LEyeX_" + i
-      L2_dist_y = "Lcoord_LEyeY_" + i2
-      L2_dist = "Lcoord_LEye_" + i.replace("_x", "").replace("_y", "")
-      #To Nose
-      L3_dist_x = "Lcoord_NoseX_" + i
-      L3_dist_y = "Lcoord_NoseY_" + i2
-      L3_dist = "Lcoord_Nose_" + i.replace("_x", "").replace("_y", "")
-      columns_hand.append(L1_dist_x)
-      columns_hand.append(L1_dist_y)
-      columns_hand.append(L1_dist)
-      columns_hand.append(L2_dist_x)
-      columns_hand.append(L2_dist_y)
-      columns_hand.append(L2_dist)
-      columns_hand.append(L3_dist_x)
-      columns_hand.append(L3_dist_y)
-      columns_hand.append(L3_dist)
-  id_c += 1
+columns_hand = get_columns_hand()
 
 def replace(group, stds):
     group[np.abs(group - group.mean()) > stds * group.std()] = np.nan
