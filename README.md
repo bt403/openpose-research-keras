@@ -1,81 +1,30 @@
-### About this fork
-
- This repo was forked from the [Anatolix fork](https://github.com/anatolix/keras_Realtime_Multi-Person_Pose_Estimation) of [Realtime Multi-Person Pose Estimation](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation).
-
-For keras version of original [Realtime Multi-Person Pose Estimation](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation) repository, see the [Michal Faber fork](https://github.com/michalfaber/keras_Realtime_Multi-Person_Pose_Estimation) and the [Anatolix fork](https://github.com/anatolix/keras_Realtime_Multi-Person_Pose_Estimation)
-
-We have edited the Anatolix fork for transfer learning, starting with the trained CMU model weights.
-
-## Changes to Anatolix fork
-
-- Add config files to main folder
-- Add video demo
-- Remove segmentation mask from coco_masks_hdf5.py (replace with bounding box)
-- load cmu model weights in train_pose.py
-
-## Results
-
-<p align="center">
-<img src="https://github.com/anatolix/keras_Realtime_Multi-Person_Pose_Estimation/blob/master/readme/dance.gif", width="720">
-</p>
-
-## How to run demo/training
-
-- To use COCO: Download the data set (~25 GB) `cd dataset; sh get_dataset.sh`,
-- Or add own data
-
-- Download [COCO official toolbox](https://github.com/pdollar/coco) in `dataset/coco/` . 
-- `cd coco/PythonAPI; sudo python setup.py install` to install pycocotools.
-- Use coco-api to view data
-
-- Download converted CMU keras model to model folder
-- `cd /model;`
-- `sudo ./get_keras_model.sh`
-
-#### Testing steps
-
-Run demo on image
-- `cd ..`
-- `python3 demo_image.py --image sample_images/ski.jpg`
-- Output saved in result.png in main folder
-
-Run demo on video
-- `python3 demo_video.py`
-- Output saved to video_data folder: video and x,y coordinates of keypoints in pkl file
-
-
-#### Training steps
-
-Create .h5 data files
-- Edit `/training/coco_masks_hdf5.py`
-	- `#!/usr/bin/env python` point to python env
-	- Point to correct .h5 data files
-	- Set size of validation set
-- `cd training`
-- Run `./coco_masks_hdf5.py` to generate .h5 training files
-
-Run training
-- Edit `/training/train_pose.py` 
-	- `#!/usr/bin/env python` point to python env
-	- Select gpus
-	- Edit batch size if needed
-	- Select model file to train on
-- Run `./train_pose.py`
-
-Model files saved in `/training/Canonical`
-
-    
-## Related repository
-- CVPR'16, [Convolutional Pose Machines](https://github.com/shihenw/convolutional-pose-machines-release).
-- CVPR'17, [Realtime Multi-Person Pose Estimation](https://github.com/ZheC/Realtime_Multi-Person_Pose_Estimation).
+### “Automatic Detection of Face Touch and Self-adaptors in Infants”
+This repository provides a framework for extracting, processing and classifying face touches in infants.
+A demo explaining all the main characteristics of the code can be seen in the file "Demo_Predicting_Face_Touches.ipynb".
 
 ## Citation
-Please cite the paper in your publications if it helps your research:    
+This code has used existing implementations of OpenPose for infants, 3D-FAN and MediaPipe to support in the detection and classification of the face touches.    
 
-    @InProceedings{cao2017realtime,
-      title = {Realtime Multi-Person 2D Pose Estimation using Part Affinity Fields},
-      author = {Zhe Cao and Tomas Simon and Shih-En Wei and Yaser Sheikh},
-      booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-      year = {2017}
-      }
-	  
+- https://github.com/cchamber/Infant_movement_assessment
+- Chambers, Claire; Seethapathi, Nidhi; Saluja, Rachit; Johnson, Michelle; Kording, Konrad Paul (2019): Computer vision to automatically assess infant neuromotor risk. figshare. Dataset. https://doi.org/10.6084/m9.figshare.8161430.v5 
+
+@InProceedings{cao2017realtime,
+	title = {Realtime Multi-Person 2D Pose Estimation using Part Affinity Fields},
+	author = {Zhe Cao and Tomas Simon and Shih-En Wei and Yaser Sheikh},
+	booktitle = {The IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+	year = {2017}
+}
+@inproceedings{bulat2017far,
+	title={How far are we from solving the 2D \& 3D Face Alignment problem? (and a dataset of 230,000 3D facial landmarks)},
+	author={Bulat, Adrian and Tzimiropoulos, Georgios},
+	booktitle={International Conference on Computer Vision},
+	year={2017}
+}
+@inproceedings{48292,
+	title	= {MediaPipe: A Framework for Perceiving and Processing Reality},
+	author	= {Camillo Lugaresi and Jiuqiang Tang and Hadon Nash and Chris McClanahan and Esha Uboweja and Michael Hays and Fan Zhang and Chuo-Ling Chang and Ming Yong and Juhyun Lee and Wan-Teh Chang and Wei Hua and Manfred Georg and Matthias Grundmann},
+	year	= {2019},
+	URL	= {https://mixedreality.cs.cornell.edu/s/NewTitle_May1_MediaPipe_CVPR_CV4ARVR_Workshop_2019.pdf},
+	booktitle	= {Third Workshop on Computer Vision for AR/VR at IEEE Computer Vision and Pattern Recognition (CVPR) 2019}
+}
+
