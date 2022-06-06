@@ -33,7 +33,7 @@ for i in targets:
     train = train[train["target"] == "on-head"]
     test = test[test["target"] == "on-head"]
     binary = False
-  runCrossValidationSVM(results, train, test, i, "model_bright", weights, binary)
+  runCrossValidationSVM(results, train, test, i, "model_001", weights, binary)
   #############
 
   for k in results.keys():
