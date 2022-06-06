@@ -19,12 +19,14 @@ parser.add_argument('--exported_frames', type=str, default='/content/drive/MyDri
 parser.add_argument('--cropped_output_path', type=str, default='/content/drive/MyDrive/ResearchProject/cropped/')
 parser.add_argument('--csv_data', type=str, default='/content/openpose-research-keras/data_full_csv.csv')
 parser.add_argument('--pose_estimates', type=str, default='/content/openpose-research-keras/data/estimates/')
+parser.add_argument('--output_path', type=str, default='/content/openpose-research-keras/data/estimates/processed_features.pkl')
 args = parser.parse_args()
 
 dir_path = args.exported_frames
 target_path = args.csv_data
 folder_cropped = args.cropped_output_path
 pose_estimates_path = args.pose_estimates
+output_path = args.output_path
 
 mp_hands = mp.solutions.hands
 
@@ -660,12 +662,47 @@ for image in list_frame_images:
     id_c += 1
 
   row_data.append(ref_dist)
-  
+  #Add angular information
+
+  #Set values for Elbow angles
+  values_LElbow = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'LElbow') & (df_angle['video'] == video_name_max)]
+  if not values_LElbow.empty:
+    angle_LElbow = values_LElbow['angle'].iloc[0]
+  else:
+    angle_LElbow = None
+  values_RElbow = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'RElbow') & (df_angle['video'] == video_name_max)]
+  if not values_RElbow.empty:
+    angle_RElbow = values_RElbow['angle'].iloc[0]
+  else:
+    angle_RElbow = None
+  values_LShoulder = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'LShoulder') & (df_angle['video'] == video_name_max)]
+  if not values_LShoulder.empty:
+    angle_LShoulder = values_LShoulder['angle'].iloc[0]
+  else:
+    angle_LShoulder = None
+  values_RShoulder = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'RShoulder') & (df_angle['video'] == video_name_max)]
+  if not values_RShoulder.empty:
+    angle_RShoulder = values_RShoulder['angle'].iloc[0]
+  else:
+    angle_RShoulder = None
+
+  row_data.append(angle_RShoulder)
+  row_data.append(angle_LShoulder)
+  row_data.append(angle_RElbow)
+  row_data.append(angle_LElbow)
+
   #Add targets to data
   found_target = False
   for i in data_target:
     if i[1].replace(" ", "") == image_name:
       row_data.append(i[2])
+      row_data.append(i[3])
+      row_data.append(i[4])
+      row_data.append(i[5])
+      row_data.append(i[6])
+      row_data.append(i[7])
+      row_data.append(i[8])
+      row_data.append(i[9])
       found_target = True
  
   with open('data_output.csv','a') as fd:
@@ -696,4 +733,6 @@ for image in list_frame_images:
   face_coords_final_old = face_coords_final
   frame_num_old = frame_num
 
+pdata = pd.DataFrame(data)
+pdata.to_pickle(output_path)
 print(data)
