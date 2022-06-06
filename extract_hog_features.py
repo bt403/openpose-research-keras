@@ -40,8 +40,8 @@ for i, row in pdata.iterrows():
   path = row['path_cropped']
   print(path)
   img_name = "_".join(path.split("/")[-1].split("_")[1:-1]) + ".jpg"
-  path_eyes = eyes_folder + img_name
-  path_mouth = mouth_folder + img_name
+  path_eyes = args.eyes_folder + img_name
+  path_mouth = args.mouth_folder + img_name
 
   fd, fd_flipped, image_1 = getHogFeatures(path)
   fd_eyes, fd_eyes_flipped, image_2 = getHogFeatures(path_eyes, (128,64))
