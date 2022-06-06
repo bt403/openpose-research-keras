@@ -64,8 +64,9 @@ class Sampling(Layer):
 
 def runCrossValidationAutoencoderSVM_withHOG(results, x_data, x_data_hog, x_data_test, x_data_hog_test, target_val, model_name, model_autoencoder, model_encoder, model_decoder, use_hog = False, weights="balanced", binary=True):
   print("training model: " + model_name)
+  columns_filter= [x for x in x_data.columns if x not in ["video_name", "coordX", "coordY", "size", "orientation", "path", "path_cropped", "target", "ref_dist", "ears", "neck", "mouth", "cheeks", "eyes", "nose", "forehead"]]
 
-  for i in x_data.columns:
+  for i in columns_filter:
     x_data[i].fillna(x_data[i].median(), inplace=True)
     x_data_test[i].fillna(x_data[i].median(), inplace=True)
 
@@ -103,7 +104,8 @@ def runCrossValidationAutoencoderSVM_withHOG(results, x_data, x_data_hog, x_data
 def runCrossValidationAutoencoderSVM(results, x_data, x_data_hog, x_data_test, x_data_hog_test, target_val, model_name, model_autoencoder, model_encoder, model_decoder, use_hog = False, weights="balanced", binary=True):
   print("training model: " + model_name)
   columns_filter= [x for x in x_data.columns if x not in ["video_name", "coordX", "coordY", "size", "orientation", "path", "path_cropped", "target", "ref_dist", "ears", "neck", "mouth", "cheeks", "eyes", "nose", "forehead"]]
-  for i in x_data.columns:
+  print(columns_filter)
+  for i in columns_filter:
     x_data[i].fillna(x_data[i].median(), inplace=True)
     x_data_test[i].fillna(x_data[i].median(), inplace=True)
 
