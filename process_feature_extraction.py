@@ -476,7 +476,7 @@ for image in list_frame_images:
   img = alignFace([coords["coord_REyeX_r"], coords["coord_REyeY_r"]], [coords["coord_LEyeX_r"], coords["coord_LEyeY_r"]], (coord_NeckX, coord_NeckY), size, np.array(img), orientation, x_max, y_max)
   path_cropped = folder_cropped + "cropped_" + str(video_name) + "_"  + str(frame_num_orig) + "_" + str(image_num) + "_" + str(orientation) + ".jpg"
   Image.fromarray(img).save(path_cropped)
-  img_2.save(folder_cropped + cropped_" + str(video_name) + "_"  + str(frame_num_orig) + "_" + str(image_num) + "_" + str(orientation) + "_2.jpg")
+  img_2.save(folder_cropped + "cropped_" + str(video_name) + "_"  + str(frame_num_orig) + "_" + str(image_num) + "_" + str(orientation) + "_2.jpg")
   
   coords["coord_LWristX"], coords["coord_LWristY"] = (values_dict["LWrist"]['x'].iloc[0], values_dict["LWrist"]['y'].iloc[0])
   coords["coord_RWristX"], coords["coord_RWristY"] = (values_dict["RWrist"]['x'].iloc[0], values_dict["RWrist"]['y'].iloc[0])
