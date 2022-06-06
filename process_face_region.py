@@ -269,3 +269,9 @@ for i, row in pdata.iterrows():
       im.save(mouth_path + frame_name)
   old_video_name = video_name
 
+pdata["score_face_region"] = scores_array
+pdata["score_eyes_region"] = scores_eyes_array
+pdata["score_mouth_region"] = scores_mouth_array
+
+pdata.to_pickle(args.processed_features)
+
