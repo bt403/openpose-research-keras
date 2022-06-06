@@ -180,7 +180,6 @@ def switch_x_y_orientation(train):
   train_augmented = train.copy()
   for i, row in train_augmented.iterrows():
     if row["orientation"] == 270:
-      print("orientation 270")
       row = df_row_switch(row,"L3_dist_x", "L3_dist_y", True)
       row = df_row_switch(row,"L4_dist_x", "L4_dist_y", True)
       
@@ -239,7 +238,6 @@ def switch_x_y_orientation(train):
       row = df_row_switch(row,'Lcoord_NoseX_pinky_finger_x_hand_R','Lcoord_NoseY_pinky_finger_y_hand_R', True)
       train_augmented.loc[i] = row
     if row["orientation"] == 90:
-      print("orientation 90")
       row = df_row_switch(row,"L3_dist_x", "L3_dist_y", False, True)
       row = df_row_switch(row,"L4_dist_x", "L4_dist_y", False, True)
       
@@ -304,6 +302,7 @@ pdata.loc[pdata["hand_found_R"].isna(),"hand_found_R"] = 0
 pdata.loc[pdata["hand_found_L"].isna(),"hand_found_L"] = 0
 pdata.loc[:, columns_hand] = pdata[columns_hand + ["video_name"]].groupby("video_name").transform(lambda g: replace(g, 1.8))
 for i in columns_hand:
+  print(i)
   pdata[i] = pdata[i]/pdata["ref_dist"]
 for i in ["L3_dist", "L3_dist_x", "L3_dist_y", "L4_dist", "L4_dist_x", "L4_dist_y"]:
   pdata[i] = pdata[i]/pdata["ref_dist"]
