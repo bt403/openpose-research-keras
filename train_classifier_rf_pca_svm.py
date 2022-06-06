@@ -11,7 +11,7 @@ args = parser.parse_args()
 train = pd.read_pickle(args.train_data)
 test = pd.read_pickle(args.test_data)
 
-targets = ["target", ["cheeks", "nose", "mouth", "eyes", "ears", "forehead"]]
+targets = ["target", ["cheeks", "nose", "mouth", "eyes", "ears"]]
 
 augmented = True
 results = {"model_001":[]}
