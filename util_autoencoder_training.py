@@ -98,9 +98,9 @@ def runCrossValidationAutoencoderSVM_withHOG(results, x_data, x_data_hog, x_data
     x_train = model_encoder([np.array(x_train_2), np.array(x_train_hog)])[2]
     x_test = model_encoder([np.array(x_test_2), np.array(x_test_hog)])[2]
 
-    params = getBestParams(x_train.numpy(), x_data[target_val], with_pca=False, binary=binary, ) #groups=x_data["video_name"])
-    #train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary)
-    train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, None, weights, False, binary)
+    params = getBestParams(x_train.numpy(), x_data[target_val], with_pca=False, binary=binary, groups=x_data["video_name"])
+    train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary)
+    #train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, None, weights, False, binary)
 
 
 def runCrossValidationAutoencoderSVM(results, x_data, x_data_hog, x_data_test, x_data_hog_test, target_val, model_name, model_autoencoder, model_encoder, model_decoder, use_hog = False, weights="balanced", binary=True):
@@ -134,6 +134,6 @@ def runCrossValidationAutoencoderSVM(results, x_data, x_data_hog, x_data_test, x
     x_test = model_autoencoder.encoder(np.array(x_test_2))[2]
 
     params = getBestParams(x_train.numpy(), x_data[target_val], with_pca=False, binary=binary, groups=x_data["video_name"])
-    #train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary)
-    train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, None, weights, False, binary)
+    train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary)
+    #train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, None, weights, False, binary)
 
