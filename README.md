@@ -5,9 +5,6 @@ A demo explaining all the main characteristics of the code can be seen in the fi
 ## Citation
 This code has used existing implementations of OpenPose for infants, 3D-FAN and MediaPipe to support in the detection and classification of the face touches.    
 
-- https://github.com/cchamber/Infant_movement_assessment
-- Chambers, Claire; Seethapathi, Nidhi; Saluja, Rachit; Johnson, Michelle; Kording, Konrad Paul (2019): Computer vision to automatically assess infant neuromotor risk. figshare. Dataset. https://doi.org/10.6084/m9.figshare.8161430.v5 
-
 	@InProceedings{cao2017realtime,
 		title = {Realtime Multi-Person 2D Pose Estimation using Part Affinity Fields},
 		author = {Zhe Cao and Tomas Simon and Shih-En Wei and Yaser Sheikh},
@@ -29,4 +26,9 @@ This code has used existing implementations of OpenPose for infants, 3D-FAN and 
 		URL	= {https://mixedreality.cs.cornell.edu/s/NewTitle_May1_MediaPipe_CVPR_CV4ARVR_Workshop_2019.pdf},
 		booktitle	= {Third Workshop on Computer Vision for AR/VR at IEEE Computer Vision and Pattern Recognition (CVPR) 2019}
 	}
+
+- https://github.com/cchamber/Infant_movement_assessment
+- Chambers, Claire; Seethapathi, Nidhi; Saluja, Rachit; Johnson, Michelle; Kording, Konrad Paul (2019): Computer vision to automatically assess infant neuromotor risk. figshare. Dataset. https://doi.org/10.6084/m9.figshare.8161430.v5 
+
+
 
