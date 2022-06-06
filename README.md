@@ -1,6 +1,7 @@
 ### “Automatic Detection of Face Touch and Self-adaptors in Infants”
 This repository provides a framework for extracting, processing and classifying face touches in infants.
-A demo explaining all the main characteristics of the code can be seen in the file "Demo_Predicting_Face_Touches.ipynb".
+A demo explaining all the main characteristics of the code can be seen in the following file:
+["Demo_Predicting_Face_Touches.ipynb"](https://github.com/bt403/openpose-research-keras/blob/main/Demo_Predicting_Face_Touches.ipynb)
 
 ## Citation
 This code has used existing implementations of OpenPose for infants, 3D-FAN and MediaPipe to support in the detection and classification of the face touches.
