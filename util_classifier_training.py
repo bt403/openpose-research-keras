@@ -108,7 +108,7 @@ def calculate_significance_test(table):
   else:
     print('Different proportions of errors (reject H0)')
 
-def train_svm(results, x_train, y_train, x_test, y_test, result_name, params, groups, weights="balanced", inverse=False, binary=True, with_pca=False):
+def train_svm(results, x_train, y_train, x_test, y_test, result_name, params, groups=None, weights="balanced", inverse=False, binary=True, with_pca=False):
   # Validation Set - 5 Fold CV
   splitter = GroupKFold(n_splits=5)
   if binary:
@@ -118,7 +118,11 @@ def train_svm(results, x_train, y_train, x_test, y_test, result_name, params, gr
         pipe = Pipeline(steps=[('imputation',imp), ("scale", StandardScaler()), ("pca", pca), ("model", svclassifier)])
     else:
         pipe = Pipeline(steps=[('imputation',imp), ("scale", StandardScaler()), ("model", svclassifier)])
-    validation = cross_validate(pipe, x_train, y_train, scoring=confusion_matrix_scorer, cv=splitter, groups = groups)
+    if groups is None:
+        validation = cross_validate(pipe, x_train, y_train, scoring=confusion_matrix_scorer)
+    else:
+        validation = cross_validate(pipe, x_train, y_train, scoring=confusion_matrix_scorer, cv=splitter, groups = groups)
+        
   else:
     svc = SVC(kernel='rbf', class_weight=weights, random_state=1, gamma=params['model__classifier__gamma'], C=params['model__classifier__C'])
     svclassifier =  LabelPowerset(svc)
@@ -127,7 +131,10 @@ def train_svm(results, x_train, y_train, x_test, y_test, result_name, params, gr
         pipe = Pipeline(steps=[('imputation',imp), ("scale", StandardScaler()), ("pca", pca), ("model", svclassifier)])
     else:
         pipe = Pipeline(steps=[('imputation',imp), ("scale", StandardScaler()), ("model", svclassifier)])
-    validation = cross_validate(pipe, x_train, y_train, scoring=confusion_matrix_scorer_multi, cv=splitter, groups = groups)
+    if groups is None:
+        validation = cross_validate(pipe, x_train, y_train, scoring=confusion_matrix_scorer_multi)
+    else:
+        validation = cross_validate(pipe, x_train, y_train, scoring=confusion_matrix_scorer_multi, cv=splitter, groups = groups)
 
   print("VALIDATION")
   print(validation)
