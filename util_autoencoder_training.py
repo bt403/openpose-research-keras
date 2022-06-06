@@ -132,6 +132,6 @@ def runCrossValidationAutoencoderSVM(results, x_data, x_data_hog, x_data_test, x
     x_train = model_autoencoder.encoder(np.array(x_train_2))[2]
     x_test = model_autoencoder.encoder(np.array(x_test_2))[2]
 
-    params = getBestParams(results, x_train.numpy(), x_data[target_val], with_pca=False, binary=binary, groups=x_data["video_name"])
+    params = getBestParams(x_train.numpy(), x_data[target_val], with_pca=False, binary=binary, groups=x_data["video_name"])
     train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary)
 
