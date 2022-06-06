@@ -610,11 +610,9 @@ for image in list_frame_images:
     if id_c == 0:
       hand_found_R = i
       row_data.append(hand_found_R)
-      columns.append("hand_found_R")
     elif id_c == 1:
       hand_found_L = i
       row_data.append(hand_found_L)
-      columns.append("hand_found_L")
     else:
       if (id_c%2 == 0): #x coordinate
         value_x = i
@@ -668,7 +666,7 @@ for image in list_frame_images:
   row_data.append(ref_dist)
   columns.append("ref_dist")
   #Add angular information
-
+  columns_hand = []
   #Append hand columns
   id_c = 0
   for i in results_hand_locations_list:
@@ -689,17 +687,17 @@ for image in list_frame_images:
         L3_dist_x = "Lcoord_NoseX_" + i
         L3_dist_y = "Lcoord_NoseY_" + i2
         L3_dist = "Lcoord_Nose_" + i.replace("_x", "").replace("_y", "")
-        #columns_hand.append(L1_dist_x)
-        #columns_hand.append(L1_dist_y)
-        #columns_hand.append(L1_dist)
-        #columns_hand.append(L2_dist_x)
-        #columns_hand.append(L2_dist_y)
-        #columns_hand.append(L2_dist)
-        #columns_hand.append(L3_dist_x)
-        #columns_hand.append(L3_dist_y)
-        #columns_hand.append(L3_dist)
+        columns_hand.append(L1_dist_x)
+        columns_hand.append(L1_dist_y)
+        columns_hand.append(L1_dist)
+        columns_hand.append(L2_dist_x)
+        columns_hand.append(L2_dist_y)
+        columns_hand.append(L2_dist)
+        columns_hand.append(L3_dist_x)
+        columns_hand.append(L3_dist_y)
+        columns_hand.append(L3_dist)
     id_c += 1
-
+  columns += columns_hand
   #Set values for Elbow angles
   values_LElbow = df_angle.loc[(df_angle['frame'] == int(frame_num)) & (df_angle['bp'] == 'LElbow') & (df_angle['video'] == video_name_max)]
   if not values_LElbow.empty:
