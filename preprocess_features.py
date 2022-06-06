@@ -296,10 +296,10 @@ def switch_x_y_orientation(train):
   return train_augmented
 
 # Normalise features that were not normalised previously. Mainly the features of the hand.
-pdata["ref_dist"] = pdata[["ref_dist", "video_name"]].groupby('video_name').apply(lambda group: group.interpolate(method='index'))
-pdata["ref_dist"] = pdata[["ref_dist", "video_name"]].groupby('video_name').apply(lambda group: group.interpolate(method='bfill'))
-pdata["ref_dist"] = pdata[["ref_dist", "video_name"]].groupby('video_name').apply(lambda group: group.interpolate(method='pad'))
-pdata["ref_dist"] = pdata.groupby('video_name')['ref_dist'].transform(lambda s: s.rolling(5, min_periods=5).mean())
+pdata[:, "ref_dist"] = pdata[["ref_dist", "video_name"]].groupby('video_name').apply(lambda group: group.interpolate(method='index'))["ref_dist"]
+pdata[:, "ref_dist"] = pdata[["ref_dist", "video_name"]].groupby('video_name').apply(lambda group: group.interpolate(method='bfill'))["ref_dist"]
+pdata[:, "ref_dist"] = pdata[["ref_dist", "video_name"]].groupby('video_name').apply(lambda group: group.interpolate(method='pad'))["ref_dist"]
+pdata[:, "ref_dist"] = pdata.groupby('video_name')['ref_dist'].transform(lambda s: s.rolling(5, min_periods=5).mean())
 pdata.loc[:,"ref_dist"] = pdata.loc[:,"ref_dist"].fillna(pdata.groupby('video_name')["ref_dist"].transform('mean'))
 pdata.loc[pdata["hand_found_R"].isna(),"hand_found_R"] = 0
 pdata.loc[pdata["hand_found_L"].isna(),"hand_found_L"] = 0
