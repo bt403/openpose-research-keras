@@ -6,11 +6,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--processed_features', type=str, default='./data/estimates/processed_features.pkl')
 parser.add_argument('--final_features', type=str, default='./data/estimates/final_features.pkl')
 parser.add_argument('--final_features_augmented', type=str, default='./data/estimates/final_features_augmented.pkl')
-parser.add_argument('--output_path', type=str, default='./data/estimates')
 
 args = parser.parse_args()
 
-output_path = args.output_path
 pdata = pd.read_pickle(args.processed_features)
 
 columns = list(pdata.columns)
@@ -335,5 +333,5 @@ pdata_augmented = augment_train(pdata)
 pdata = switch_x_y_orientation(pdata)
 pdata_augmented = switch_x_y_orientation(pdata_augmented)
 
-pdata.to_pickle(output_path + 'final_features.pkl')
-pdata_augmented.to_pickle(output_path + 'final_features_augmented.pkl')
+pdata.to_pickle(args.final_features)
+pdata_augmented.to_pickle(args.final_features_augmented)
