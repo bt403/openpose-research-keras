@@ -59,6 +59,7 @@ def get_columns_hand():
         columns_hand.append(L3_dist_y)
         columns_hand.append(L3_dist)
   id_c += 1
+  return columns_hand
 
 def create_model_multiclass(input_dim, output_dim):
     # create model
