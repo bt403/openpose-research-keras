@@ -26,8 +26,6 @@ target_path = args.csv_data
 folder_cropped = args.cropped_output_path
 pose_estimates_path = args.pose_estimates
 
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 results_hand_locations_list = ["hand_found_R", "hand_found_L", "origin_x_hand_L", "origin_y_hand_L", "origin_x_hand_R", "origin_y_hand_R",
@@ -420,9 +418,9 @@ for image in list_frame_images:
 
   #validate openface eyes fit with skeleton coordinates
   if (np.isnan(coord_REyeX_r) or coordX_old is None):
-    print("ok_1_1")
+    print("-")
   elif (coord_REyeX_r - 20 > coordX and (coord_REyeX_r + 20 < coordX + size)):
-    print("ok_1_2")
+    print("_")
   elif (coord_REyeX_r - 20 > coordX_old and (coord_REyeX_r + 20 < coordX_old + size_old)):
     print ("exchanging coords_1")
     coords["coord_REyeX_r"], coords["coord_REyeY_r"] = (coord_REyeX_r, coord_REyeY_r)
@@ -432,9 +430,9 @@ for image in list_frame_images:
     size = size_old
   
   if (np.isnan(coord_REyeY_r) or coordY_old is None):
-    print("ok_1_1")
+    print("-")
   elif (coord_REyeY_r - 20 > coordY and (coord_REyeY_r + 20 < coordY + size)):
-    print("ok_1_2")
+    print("-")
   elif (coord_REyeY_r - 20 > coordY_old and (coord_REyeY_r + 20 < coordY_old + size_old)):
     print ("exchanging coords_1")
     coords["coord_REyeX_r"], coords["coord_REyeY_r"] = (coord_REyeX_r, coord_REyeY_r)
@@ -444,9 +442,9 @@ for image in list_frame_images:
     size = size_old
 
   if (np.isnan(coord_LEyeX_r) or coordX_old is None):
-    print("ok_2_1")
+    print("-")
   elif (coord_LEyeX_r - 20 > coordX and (coord_LEyeX_r + 20 < coordX + size)):
-    print("ok_2_2")
+    print("-")
   elif (coord_LEyeX_r - 20 > coordX_old and (coord_LEyeX_r + 20 < coordX_old + size_old)):
     print ("exchanging coords_2")
     coords["coord_REyeX_r"], coords["coord_REyeY_r"] = (coord_REyeX_r, coord_REyeY_r)
@@ -456,9 +454,9 @@ for image in list_frame_images:
     size = size_old
   
   if (np.isnan(coord_LEyeY_r) or coordY_old is None):
-    print("ok_2_1")
+    print("-")
   elif (coord_LEyeY_r - 20 > coordY and (coord_LEyeY_r + 20 < coordY + size)):
-    print("ok_2_2")
+    print("-")
   elif (coord_LEyeY_r - 20 > coordY_old and (coord_LEyeY_r + 20 < coordY_old + size_old)):
     print ("exchanging coords_2")
     coords["coord_REyeX_r"], coords["coord_REyeY_r"] = (coord_REyeX_r, coord_REyeY_r)
@@ -480,8 +478,6 @@ for image in list_frame_images:
   
   coords["coord_LWristX"], coords["coord_LWristY"] = (values_dict["LWrist"]['x'].iloc[0], values_dict["LWrist"]['y'].iloc[0])
   coords["coord_RWristX"], coords["coord_RWristY"] = (values_dict["RWrist"]['x'].iloc[0], values_dict["RWrist"]['y'].iloc[0])
-  #coords["coord_LWristX_r"], coords["coord_LWristY_r"] = (values_dict["LWrist_r"]['x'].iloc[0], values_dict["LWrist_r"]['y'].iloc[0])
-  #coords["coord_RWristX_r"], coords["coord_RWristY_r"] = (values_dict["RWrist_r"]['x'].iloc[0], values_dict["RWrist_r"]['y'].iloc[0])
 
   coords["coord_NoseX"], coords["coord_NoseY"] = (values_dict["Nose"]['x'].iloc[0], values_dict["Nose"]['y'].iloc[0])
   coords["coord_NeckX"], coords["coord_NeckY"] = (values_dict["Neck"]['x'].iloc[0], values_dict["Neck"]['y'].iloc[0])
