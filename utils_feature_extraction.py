@@ -3,6 +3,11 @@ import math
 import cv2
 import numpy as np
 from PIL import Image
+import mediapipe as mp
+
+
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
 
 def removeOutliers(group):
   c = 0
