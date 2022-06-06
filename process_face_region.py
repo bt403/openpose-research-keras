@@ -110,7 +110,6 @@ for i, row in pdata.iterrows():
   coordY_end_array.append(coordY_new_end)
 
   img = img_orig[coordY_new_start:coordY_new_end, coordX_new_start:coordX_new_end]
-  plt.imshow(img)
 
   fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._3D, flip_input=False, device='cuda', face_detector='sfd')
   (point, scores, _) = fa.get_landmarks(img, return_landmark_score=True) 
