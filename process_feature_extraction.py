@@ -690,7 +690,7 @@ for image in list_frame_images:
         L3_dist_y = "Lcoord_NoseY_" + i2
         L3_dist = "Lcoord_Nose_" + i.replace("_x", "").replace("_y", "")
         #columns_hand.append(L1_dist_x)
-        columns_hand.append(L1_dist_y)
+        #columns_hand.append(L1_dist_y)
         #columns_hand.append(L1_dist)
         #columns_hand.append(L2_dist_x)
         #columns_hand.append(L2_dist_y)
