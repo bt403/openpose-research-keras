@@ -65,6 +65,7 @@ class Sampling(Layer):
 def runCrossValidationAutoencoderSVM_withHOG(results, x_data, x_data_hog, x_data_test, x_data_hog_test, target_val, model_name, model_autoencoder, model_encoder, model_decoder, use_hog = False, weights="balanced", binary=True):
   print("training model: " + model_name)
   columns_filter= [x for x in x_data.columns if x not in ["video_name", "coordX", "coordY", "size", "orientation", "path", "path_cropped", "target", "ref_dist", "ears", "neck", "mouth", "cheeks", "eyes", "nose", "forehead"]]
+  print(columns_filter)
 
   for i in columns_filter:
     x_data[i].fillna(x_data[i].median(), inplace=True)
@@ -97,14 +98,13 @@ def runCrossValidationAutoencoderSVM_withHOG(results, x_data, x_data_hog, x_data
     x_train = model_encoder([np.array(x_train_2), np.array(x_train_hog)])[2]
     x_test = model_encoder([np.array(x_test_2), np.array(x_test_hog)])[2]
 
-    params = getBestParams(results, x_train.numpy(), x_data[target_val], with_pca=False, binary=binary, groups=x_data["video_name"])
+    params = getBestParams(x_train.numpy(), x_data[target_val], with_pca=False, binary=binary, groups=x_data["video_name"])
     train_svm(results, x_train.numpy(), x_data[target_val], x_test, x_data_test[target_val], model_name, params, x_data["video_name"], weights, False, binary)
 
 
 def runCrossValidationAutoencoderSVM(results, x_data, x_data_hog, x_data_test, x_data_hog_test, target_val, model_name, model_autoencoder, model_encoder, model_decoder, use_hog = False, weights="balanced", binary=True):
   print("training model: " + model_name)
   columns_filter= [x for x in x_data.columns if x not in ["video_name", "coordX", "coordY", "size", "orientation", "path", "path_cropped", "target", "ref_dist", "ears", "neck", "mouth", "cheeks", "eyes", "nose", "forehead"]]
-  print(columns_filter)
   for i in columns_filter:
     x_data[i].fillna(x_data[i].median(), inplace=True)
     x_data_test[i].fillna(x_data[i].median(), inplace=True)
