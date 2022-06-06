@@ -21,6 +21,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from statistics import mean, median
 from sklearn.model_selection import cross_validate
 from sklearn.ensemble import RandomForestClassifier
+import numpy as np
 
 def get_columns_hand():
   columns_hand = []
