@@ -670,6 +670,7 @@ for image in list_frame_images:
   #Add angular information
 
   #Append hand columns
+  id_c = 0
   for i in results_hand_locations_list:
     if id_c < 2:
       columns.append(i)
