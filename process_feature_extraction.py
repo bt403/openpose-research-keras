@@ -12,12 +12,22 @@ import numpy as np
 import cv2 as cv2
 import math
 from utils_feature_extraction import *
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--exported_frames', type=str, default='/content/drive/MyDrive/ResearchProject/exported_frames/')
+parser.add_argument('--cropped_output_path', type=str, default='/content/drive/MyDrive/ResearchProject/cropped/')
+parser.add_argument('--csv_data', type=str, default='/content/openpose-research-keras/data_full_csv_v2.csv')
+args = parser.parse_args()
+
+dir_path = args.exported_frames
+target_path = args.csv_data
+folder_cropped = args.cropped_output_path
+pose_estimates_path = '/content/openpose-research-keras/data/estimates/'
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
-
-
 
 results_hand_locations_list = ["hand_found_R", "hand_found_L", "origin_x_hand_L", "origin_y_hand_L", "origin_x_hand_R", "origin_y_hand_R",
           "thumb_finger_x_hand_L", "thumb_finger_y_hand_L", "thumb_finger_x_hand_R", "thumb_finger_y_hand_R",
@@ -26,31 +36,16 @@ results_hand_locations_list = ["hand_found_R", "hand_found_L", "origin_x_hand_L"
  "ring_finger_x_hand_L", "ring_finger_y_hand_L", "ring_finger_x_hand_R", "ring_finger_y_hand_R", 
  "pinky_finger_x_hand_L", "pinky_finger_y_hand_L", "pinky_finger_x_hand_R", "pinky_finger_y_hand_R"]
 
-x_columns = ["x_0","x_1","x_2","x_3","x_4","x_5","x_6","x_7","x_8","x_9","x_10","x_11","x_12","x_13","x_14","x_15","x_16","x_17","x_18","x_19","x_20","x_21","x_22","x_23","x_24","x_25","x_26","x_27","x_28","x_29","x_30","x_31","x_32","x_33","x_34","x_35","x_36","x_37","x_38","x_39","x_40","x_41","x_42","x_43","x_44","x_45","x_46","x_47","x_48","x_49","x_50","x_51","x_52","x_53","x_54","x_55","x_56","x_57","x_58","x_59","x_60","x_61","x_62","x_63","x_64","x_65","x_66","x_67"]
-y_columns = ["y_0","y_1","y_2","y_3","y_4","y_5","y_6","y_7","y_8","y_9","y_10","y_11","y_12","y_13","y_14","y_15","y_16","y_17","y_18","y_19","y_20","y_21","y_22","y_23","y_24","y_25","y_26","y_27","y_28","y_29","y_30","y_31","y_32","y_33","y_34","y_35","y_36","y_37","y_38","y_39","y_40","y_41","y_42","y_43","y_44","y_45","y_46","y_47","y_48","y_49","y_50","y_51","y_52","y_53","y_54","y_55","y_56","y_57","y_58","y_59","y_60","y_61","y_62","y_63","y_64","y_65","y_66","y_67"]
+df = pd.read_pickle(os.path.join(pose_estimates_path, 'processed_pose_estimates_coords.pkl'))
+df = df.groupby(['video', "bp"]).apply(removeOutliers)
 
-openface_df = pd.read_csv("/content/openpose-research-keras/processed/all-batches.csv")
-openface_df_90 = pd.read_csv("/content/openpose-research-keras/processed_90/all-batches-90.csv")
-openface_df_270 = pd.read_csv("/content/openpose-research-keras/processed_270/all-batches-270.csv")
-openface_df = addMinMax(openface_df)
-openface_df_90 = addMinMax(openface_df_90)
-openface_df_270 = addMinMax(openface_df_270)
-
-#orientation_data = pd.read_csv('/content/openpose-research-keras/orientation.csv', names=["frame", "path", "orientation"], header=0)
-
-pose_estimates_path = '/content/openpose-research-keras/data/estimates/'
-#df = pd.read_pickle(os.path.join(pose_estimates_path, 'processed_pose_estimates_coords.pkl'))
-#df = df.groupby(['video', "bp"]).apply(removeOutliers)
-
-#df_real_pos = pd.read_pickle(os.path.join(pose_estimates_path, 'pose_estimates.pkl'))
-#df_real_pos = df_real_pos.groupby(['video', "bp"]).apply(removeOutliers)
+df_real_pos = pd.read_pickle(os.path.join(pose_estimates_path, 'pose_estimates.pkl'))
+df_real_pos = df_real_pos.groupby(['video', "bp"]).apply(removeOutliers)
 
 df_angle = pd.read_pickle(os.path.join(pose_estimates_path, 'processed_pose_estimates_angles.pkl'))
 
-dir_path = '/content/drive/MyDrive/ResearchProject/data/all-batches/'
 list_frame_images = sorted(os.listdir(dir_path))
 
-target_path = '/content/openpose-research-keras/data_full_csv_v2.csv'
 data_target = []
 with open(target_path, newline='') as f:
     reader = csv.reader(f)
@@ -58,7 +53,6 @@ with open(target_path, newline='') as f:
 
 data = []
 c = 0
-
 
 frame_num_old = 0
 face_coords_final_old = None
@@ -96,9 +90,6 @@ coord_hand_y_R_old = np.nan
 
 for image in list_frame_images:
   print(c)
-  #if (c < 5745):
-  #  c+=1
-  #  continue;
   c+=1
   image_name = image
   split_img = image.split('_')
@@ -164,7 +155,8 @@ for image in list_frame_images:
   df_frame = df_real_pos.loc[(df_real_pos['frame'] == int(frame_num)) & (df_real_pos['video'] == video_name_max)]
   while (df_frame.empty):
     frame_num = frame_num - 1
-    df_frame = df_real_pos.loc[(df['frame'] == int(frame_num)) & (df['video'] == video_name_max)]
+    print (frame_num)
+    df_frame = df_real_pos.loc[(df_real_pos['frame'] == int(frame_num)) & (df_real_pos['video'] == video_name_max)]
 
   #Set real values for Eyes and Nose
   values_LEye_r = df_real_pos.loc[(df_real_pos['frame'] == int(frame_num)) & (df_real_pos['bp'] == 'LEye') & (df_real_pos['video'] == video_name_max)]
@@ -314,9 +306,9 @@ for image in list_frame_images:
   pixel_x, pixel_y = (values_left_eye_pixel_x_y['pixel_x'].iloc[0], values_left_eye_pixel_x_y['pixel_y'].iloc[0])
 
   #Get Box coordinates around Hip and Neck
-  path = '/content/drive/MyDrive/ResearchProject/data/all-batches/' + image
-  orientation = orientation_data.loc[(orientation_data['path'] == path)]["orientation"].iloc[0]
-  coordX, coordY, size = getBoxCoordinates(coord_HipX, coord_HipY, coord_NeckX, coord_NeckY, pixel_x, pixel_y, orientation)
+  path = dir_path + image
+  #orientation = orientation_data.loc[(orientation_data['path'] == path)]["orientation"].iloc[0]
+  coordX, coordY, size, orientation = getBoxCoordinates(coord_HipX, coord_HipY, coord_NeckX, coord_NeckY, pixel_x, pixel_y)#, orientation)
   if coordX is None:
     coordX = coordX_old
     coordY = coordY_old
@@ -325,14 +317,6 @@ for image in list_frame_images:
     coordX = 0
     coordY = 0
     size = pixel_x
-  
-  #Get face coordinates from OpenFace
-  if orientation == 90:
-    openface_df_faces_90 = openface_df_90.loc[openface_df_90['frame'] == c]
-  elif orientation == 270:
-    openface_df_faces_270 = openface_df.loc[openface_df['frame'] == c]
-  else:
-    openface_df_faces = openface_df_270.loc[openface_df_270['frame'] == c]
 
   #Check which faces are inside the box using OpenPose and OpenFace
   y_max = int(pixel_x)
@@ -341,11 +325,11 @@ for image in list_frame_images:
   faces_90 = []
   faces_270 = []
   if orientation == 90:
-    faces_90 = getFaces(openface_df_faces_90, y_max, x_max, (coord_LEyeX_r, coord_LEyeY_r), (coord_REyeX_r, coord_REyeY_r), (coord_NeckX, coord_NeckY), coordX, coordY, size, 90)
+    faces_90 = getFaces(None, y_max, x_max, (coord_LEyeX_r, coord_LEyeY_r), (coord_REyeX_r, coord_REyeY_r), (coord_NeckX, coord_NeckY), coordX, coordY, size, 90)
   elif orientation == 270:
-    faces_270 = getFaces(openface_df_faces_270, y_max, x_max, (coord_LEyeX_r, coord_LEyeY_r), (coord_REyeX_r, coord_REyeY_r), (coord_NeckX, coord_NeckY), coordX, coordY, size, 270)
+    faces_270 = getFaces(None, y_max, x_max, (coord_LEyeX_r, coord_LEyeY_r), (coord_REyeX_r, coord_REyeY_r), (coord_NeckX, coord_NeckY), coordX, coordY, size, 270)
   else:
-    faces = getFaces(openface_df_faces, y_max, x_max, (coord_LEyeX_r, coord_LEyeY_r), (coord_REyeX_r, coord_REyeY_r), (coord_NeckX, coord_NeckY), coordX, coordY, size, 0)
+    faces = getFaces(None, y_max, x_max, (coord_LEyeX_r, coord_LEyeY_r), (coord_REyeX_r, coord_REyeY_r), (coord_NeckX, coord_NeckY), coordX, coordY, size, 0)
 
   face_coords_final = None
   if (values_old_leye is not None) and (values_old_reye is not None):
@@ -444,8 +428,6 @@ for image in list_frame_images:
     coords["coord_LEyeX_r"], coords["coord_LEyeY_r"] = (coord_LEyeX_r, coord_LEyeY_r)
     coordX = coordX_old
     coordY = coordY_old
-    #values_LEye_r = (coord_LEyeX_r, coord_LEyeY_r)
-    #valuesREye_r = (coord_REyeX_r, coord_REyeY_r)
     size = size_old
   
   if (np.isnan(coord_REyeY_r) or coordY_old is None):
@@ -458,8 +440,6 @@ for image in list_frame_images:
     coords["coord_LEyeX_r"], coords["coord_LEyeY_r"] = (coord_LEyeX_r, coord_LEyeY_r)
     coordX = coordX_old
     coordY = coordY_old
-    #values_LEye_r = (coord_LEyeX_r, coord_LEyeY_r)
-    #valuesREye_r = (coord_REyeX_r, coord_REyeY_r)
     size = size_old
 
   if (np.isnan(coord_LEyeX_r) or coordX_old is None):
@@ -472,8 +452,6 @@ for image in list_frame_images:
     coords["coord_LEyeX_r"], coords["coord_LEyeY_r"] = (coord_LEyeX_r, coord_LEyeY_r)
     coordX = coordX_old
     coordY = coordY_old
-    #values_LEye_r = (coord_LEyeX_r, coord_LEyeY_r)
-    #valuesREye_r = (coord_REyeX_r, coord_REyeY_r)
     size = size_old
   
   if (np.isnan(coord_LEyeY_r) or coordY_old is None):
@@ -486,8 +464,6 @@ for image in list_frame_images:
     coords["coord_LEyeX_r"], coords["coord_LEyeY_r"] = (coord_LEyeX_r, coord_LEyeY_r)
     coordX = coordX_old
     coordY = coordY_old
-    #values_LEye_r = (coord_LEyeX_r, coord_LEyeY_r)
-    #valuesREye_r = (coord_REyeX_r, coord_REyeY_r)
     size = size_old
   img = Image.open(path)
   box = coordX, coordY, coordX+size, coordY + size
@@ -497,9 +473,9 @@ for image in list_frame_images:
   img = Image.open(path)
   img = img.convert('RGB')
   img = alignFace([coords["coord_REyeX_r"], coords["coord_REyeY_r"]], [coords["coord_LEyeX_r"], coords["coord_LEyeY_r"]], (coord_NeckX, coord_NeckY), size, np.array(img), orientation, x_max, y_max)
-  path_cropped = "/content/drive/MyDrive/ResearchProject/cropped3/cropped_" + str(video_name) + "_"  + str(frame_num_orig) + "_" + str(image_num) + "_" + str(orientation) + ".jpg"
+  path_cropped = folder_cropped + "cropped_" + str(video_name) + "_"  + str(frame_num_orig) + "_" + str(image_num) + "_" + str(orientation) + ".jpg"
   Image.fromarray(img).save(path_cropped)
-  img_2.save("/content/drive/MyDrive/ResearchProject/cropped3/cropped_" + str(video_name) + "_"  + str(frame_num_orig) + "_" + str(image_num) + "_" + str(orientation) + "_2.jpg")
+  img_2.save(folder_cropped + cropped_" + str(video_name) + "_"  + str(frame_num_orig) + "_" + str(image_num) + "_" + str(orientation) + "_2.jpg")
   
   coords["coord_LWristX"], coords["coord_LWristY"] = (values_dict["LWrist"]['x'].iloc[0], values_dict["LWrist"]['y'].iloc[0])
   coords["coord_RWristX"], coords["coord_RWristY"] = (values_dict["RWrist"]['x'].iloc[0], values_dict["RWrist"]['y'].iloc[0])
@@ -524,36 +500,6 @@ for image in list_frame_images:
             if not values_dict[i].empty:
               coords["coord_" + i + "X"], coords["coord_" + i + "Y"] = (values_dict[i]['x'].iloc[0], values_dict[i]['y'].iloc[0])
     values_old_dict[i] = values_dict[i]
-  
-  '''
-  if (np.isnan(coords["coord_LWristX_r"])):
-    if (values_old_dict["LWrist_r"] is not None):
-      values_dict["LWrist_r"] = values_old_dict["LWrist_r"]
-      coords["coord_LWristX_r"], coords["coord_LWristY_r"] = (values_dict["LWrist_r"]['x'].iloc[0], values_dict["LWrist_r"]['y'].iloc[0])
-    else:
-      frame_num_now = int(frame_num)
-      if (first_frame):
-        while np.isnan(coords["coord_LWristX_r"]) and not values_dict["LWrist_r"].empty:
-          frame_num_now +=1
-          values_dict["LWrist_r"] = df_real_pos.loc[(df_real_pos['frame'] == int(frame_num_now)) & (df_real_pos['bp'] == 'LWrist') & (df_real_pos['video'] == video_name_max)]
-          if not values_dict["LWrist_r"].empty:
-            coords["coord_LWristX_r"], coords["coord_LWristY_r"] = (values_dict["LWrist_r"]['x'].iloc[0], values_dict["LWrist_r"]['y'].iloc[0])
-  values_old_dict["LWrist_r"] = values_dict["LWrist_r"]
-  
-  if (np.isnan(coords["coord_RWristX_r"])):
-    if ((values_old_dict["RWrist_r"] is not None) and not values_old_dict["RWrist_r"].empty):
-      values_dict["RWrist_r"] = values_old_dict["RWrist_r"]
-      coords["coord_RWristX_r"], coords["coord_RWristY_r"] = (values_dict["RWrist_r"]['x'].iloc[0], values_dict["RWrist_r"]['y'].iloc[0])
-    else:
-      frame_num_now = int(frame_num)
-      if (first_frame):
-        while np.isnan(coords["coord_RWristX_r"]) and not values_dict["RWrist_r"].empty:
-          frame_num_now +=1
-          values_dict["RWrist_r"] = df_real_pos.loc[(df_real_pos['frame'] == int(frame_num_now)) & (df_real_pos['bp'] == 'RWrist') & (df_real_pos['video'] == video_name_max)]
-          if not values_dict["RWrist_r"].empty:
-            coords["coord_RWristX_r"], coords["coord_RWristY_r"] = (values_dict["RWrist_r"]['x'].iloc[0], values_dict["RWrist_r"]['y'].iloc[0])
-  values_old_dict["RWrist_r"] = values_dict["RWrist_r"]
-  '''
   
   first_frame = False
 
@@ -581,7 +527,7 @@ for image in list_frame_images:
     if (not values_dict["LEye"].empty):
       L3_dist = L3_dist
       L4_dist = L4_dist
-    elif (not values_dict["LEar"].empty):
+    elif (not values_dict["LEar"].eormpty):
       L3_dist = L3_dist
       L4_dist = L4_dist
     else:
@@ -648,7 +594,7 @@ for image in list_frame_images:
       max_num_hands=2,
       min_detection_confidence=0.4) as hands:
       
-    file_full = '/content/drive/MyDrive/ResearchProject/data/all-batches/' + image
+    file_full = dir_path + image
     sizeX = sizeY = None
     if coord_LWristX_r and coord_RWristX_r and not np.isnan(coord_RWristX_r) and not np.isnan(coord_LWristX_r):
       coordX, coordX_max = min(coord_LWristX_r, coord_RWristX_r) - 100.0/1280*pixel_x, max(coord_LWristX_r, coord_RWristX_r) + 100.0/1280*pixel_x
